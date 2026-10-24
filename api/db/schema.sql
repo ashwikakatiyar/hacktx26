@@ -1,7 +1,7 @@
--- The Village Table: schema (Phase 0)
+-- The Round Table: schema (Phase 0)
 -- Run with: npm run db:init
 
-DROP TABLE IF EXISTS expenses, event_attendees, events, card_shares, cards,
+DROP TABLE IF EXISTS expenses, availability, event_attendees, events, card_shares, cards,
   group_members, groups, friendships, constraints, users CASCADE;
 
 CREATE TABLE users (
@@ -31,10 +31,15 @@ CREATE TABLE constraints (
   interests     TEXT[] DEFAULT '{}'
 );
 
+-- One row per friend pair (user_a < user_b). Powers the village:
+-- last_hung_out = most recent HAPPENED event both attended; kept in sync when an event becomes happened.
 CREATE TABLE friendships (
-  user_id   INT REFERENCES users(id) ON DELETE CASCADE,
-  friend_id INT REFERENCES users(id) ON DELETE CASCADE,
-  PRIMARY KEY (user_id, friend_id)
+  user_a        INT REFERENCES users(id) ON DELETE CASCADE,
+  user_b        INT REFERENCES users(id) ON DELETE CASCADE,
+  last_hung_out TIMESTAMPTZ,
+  hangout_count INT DEFAULT 0,
+  PRIMARY KEY (user_a, user_b),
+  CHECK (user_a < user_b)
 );
 
 CREATE TABLE groups (
@@ -61,6 +66,7 @@ CREATE TABLE cards (
   price_level   INT,                        -- 1..4
   rating        NUMERIC(2,1),
   dietary_tags  TEXT[] DEFAULT '{}',
+  source        TEXT DEFAULT 'text',        -- text | screenshot | chat | seed (shown as a tag on group page)
   source_text   TEXT,                       -- original pasted text / screenshot note
   needs_review  BOOLEAN DEFAULT FALSE,      -- SerpApi found nothing -> manual edit
   created_at    TIMESTAMPTZ DEFAULT now()
@@ -76,11 +82,11 @@ CREATE TABLE card_shares (
 
 CREATE TABLE events (
   id          SERIAL PRIMARY KEY,
-  group_id    INT REFERENCES groups(id) ON DELETE CASCADE,
-  card_id     INT REFERENCES cards(id),
+  group_id    INT REFERENCES groups(id) ON DELETE SET NULL,  -- NULL for logged hangouts outside a group
+  card_id     INT REFERENCES cards(id),                      -- NULL for logged hangouts
   title       TEXT NOT NULL,
   starts_at   TIMESTAMPTZ,
-  status      TEXT DEFAULT 'proposed',      -- proposed | confirmed | past
+  status      TEXT DEFAULT 'proposed' CHECK (status IN ('proposed','confirmed','happened')),
   est_cost_total NUMERIC(8,2),
   reasoning   TEXT,                         -- planner's visible explanation
   created_at  TIMESTAMPTZ DEFAULT now()

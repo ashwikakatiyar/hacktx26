@@ -1,0 +1,17 @@
+[
+  {
+    "text": "we should try Ramen Tatsu-Ya",
+    "extraction": { "name": "Ramen Tatsu-Ya", "activity_type": "dinner", "location": "Austin, TX", "dietary_tags": [] },
+    "place": { "name": "Ramen Tatsu-Ya", "address": "8557 Research Blvd #126, Austin, TX", "image_url": null, "price_level": 2, "rating": 4.6 }
+  },
+  {
+    "text": "sunset swim at Barton Springs??",
+    "extraction": { "name": "Barton Springs Pool", "activity_type": "outdoors", "location": "Austin, TX", "dietary_tags": [] },
+    "place": { "name": "Barton Springs Pool", "address": "2131 William Barton Dr, Austin, TX", "image_url": null, "price_level": 1, "rating": 4.8 }
+  },
+  {
+    "text": "veggie friendly dinner at Odd Duck",
+    "extraction": { "name": "Odd Duck", "activity_type": "dinner", "location": "Austin, TX", "dietary_tags": ["vegetarian"] },
+    "place": { "name": "Odd Duck", "address": "1201 S Lamar Blvd, Austin, TX", "image_url": null, "price_level": 3, "rating": 4.6 }
+  }
+]
