@@ -1,6 +1,7 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
+import { Text } from "@/components/Text";
 import { Avatar } from "@/components/Avatar";
-import { colors } from "@/lib/theme";
+import { cardSurface, colors } from "@/lib/theme";
 import type { Contact } from "@/mock/data";
 
 // People you can add or invite. Shared by onboarding step 4 and the invite screen (group page, open plots).
@@ -52,14 +53,7 @@ export function InviteList({
 }
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: colors.line,
-    borderRadius: 20,
-    paddingHorizontal: 14,
-    paddingVertical: 4,
-  },
+  card: { ...cardSurface, paddingHorizontal: 16, paddingVertical: 4 },
   row: {
     flexDirection: "row",
     alignItems: "center",
@@ -77,7 +71,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1.5,
     borderColor: colors.accent,
-    backgroundColor: "#fff",
+    backgroundColor: colors.card,
     alignItems: "center",
     justifyContent: "center",
   },

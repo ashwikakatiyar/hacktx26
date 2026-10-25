@@ -3,19 +3,14 @@ import * as Clipboard from "expo-clipboard";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { Text, TextInput } from "@/components/Text";
 import { CardView } from "@/components/CardView";
+import { Icon } from "@/components/Icon";
+import { Button, Card, Chip, ScreenHeader } from "@/components/ui";
+import { useFairy } from "@/lib/fairy";
 import { api, type CreateResult, type Group } from "@/lib/api";
-import { colors } from "@/lib/theme";
+import { colors, fonts } from "@/lib/theme";
 
 type Picked = { uri: string; base64: string; mime: string };
 
@@ -28,6 +23,7 @@ export default function AddIdea() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<CreateResult | null>(null);
+  const { name: fairy } = useFairy();
 
   useEffect(() => {
     api
@@ -113,212 +109,133 @@ export default function AddIdea() {
   if (result) {
     const { card } = result;
     return (
-      <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.title}>
-          {card.needs_review ? "Almost there" : "Added to your ideas"}
-        </Text>
-        <CardView card={card} />
-        {card.needs_review && (
-          <Text style={styles.hint}>
-            We couldn't find every detail for this one. Check the price and
-            address.
-          </Text>
-        )}
-        <View style={styles.buttons}>
-          {card.needs_review && (
-            <Pressable
-              style={[styles.btn, styles.btnPrimary]}
-              onPress={() =>
-                router.replace({
-                  pathname: "/card/[id]",
-                  params: { id: String(card.id) },
-                })
-              }
-            >
-              <Text style={styles.btnPrimaryText}>Edit details</Text>
-            </Pressable>
-          )}
-          <Pressable
-            style={[
-              styles.btn,
-              card.needs_review ? styles.btnGhost : styles.btnPrimary,
-            ]}
-            onPress={() => router.back()}
-          >
-            <Text
-              style={
-                card.needs_review ? styles.btnGhostText : styles.btnPrimaryText
-              }
-            >
-              Done
-            </Text>
-          </Pressable>
-          <Pressable style={[styles.btn, styles.btnGhost]} onPress={reset}>
-            <Text style={styles.btnGhostText}>Add another</Text>
-          </Pressable>
-        </View>
-      </ScrollView>
+      <View style={styles.screen}>
+        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+          <ScreenHeader
+            title={card.needs_review ? "Almost there" : "Ooh, shiny!"}
+            subtitle={
+              card.needs_review
+                ? "We couldn’t find every detail. Check the price and address."
+                : `${fairy} conjured a card for you.`
+            }
+            onBack={() => router.back()}
+            backIcon="close"
+          />
+          <View style={styles.body}>
+            <CardView card={card} />
+            <View style={{ gap: 10, marginTop: 6 }}>
+              {card.needs_review && (
+                <Button
+                  label="Edit details"
+                  onPress={() => router.replace({ pathname: "/card/[id]", params: { id: String(card.id) } })}
+                />
+              )}
+              <Button
+                label="Done"
+                variant={card.needs_review ? "ghost" : "primary"}
+                onPress={() => router.back()}
+              />
+              <Button label="Add another" variant="ghost" onPress={reset} />
+            </View>
+          </View>
+        </ScrollView>
+      </View>
     );
   }
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.content}
-      keyboardShouldPersistTaps="handled"
-    >
-      <Text style={styles.label}>Paste a message or describe the idea</Text>
-      <TextInput
-        style={styles.input}
-        value={text}
-        onChangeText={setText}
-        placeholder="we should try Ramen Tatsu-Ya!"
-        placeholderTextColor={colors.muted}
-        multiline
-      />
-
-      <View style={styles.buttons}>
-        <Pressable
-          style={[styles.btn, styles.btnGhost, styles.flex]}
-          onPress={paste}
-        >
-          <Text style={styles.btnGhostText}>Paste</Text>
-        </Pressable>
-        <Pressable
-          style={[styles.btn, styles.btnGhost, styles.flex]}
-          onPress={pickScreenshot}
-        >
-          <Text style={styles.btnGhostText}>Choose screenshot</Text>
-        </Pressable>
-      </View>
-
-      {image && (
-        <View style={styles.preview}>
-          <Image
-            source={{ uri: image.uri }}
-            style={styles.previewImg}
-            contentFit="cover"
-          />
-          <Pressable onPress={() => setImage(null)} hitSlop={10}>
-            <Text style={styles.remove}>Remove</Text>
-          </Pressable>
-        </View>
-      )}
-
-      {groups.length > 0 && (
-        <>
-          <Text style={[styles.label, { marginTop: 18 }]}>
-            Add to a group (optional)
-          </Text>
-          <View style={styles.chips}>
-            {groups.map((g) => {
-              const on = selected.includes(g.id);
-              return (
-                <Pressable
-                  key={g.id}
-                  onPress={() => toggleGroup(g.id)}
-                  style={[styles.chip, on && styles.chipOn]}
-                >
-                  <Text style={[styles.chipText, on && styles.chipTextOn]}>
-                    {g.name}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </View>
-        </>
-      )}
-
-      {error && <Text style={styles.error}>{error}</Text>}
-
-      <Pressable
-        style={[
-          styles.btn,
-          styles.btnPrimary,
-          !canSubmit && styles.disabled,
-          { marginTop: 22 },
-        ]}
-        onPress={submit}
-        disabled={!canSubmit}
+    <View style={styles.screen}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
-        {busy ? (
-          <View style={styles.busy}>
-            <ActivityIndicator color="#fff" />
-            <Text style={styles.btnPrimaryText}>
-              {image ? "Reading your screenshot…" : "Finding the place…"}
-            </Text>
-          </View>
-        ) : (
-          <Text style={styles.btnPrimaryText}>Make a card</Text>
-        )}
-      </Pressable>
-    </ScrollView>
+        <ScreenHeader
+          title="Drop in an idea"
+          subtitle={`Paste a message or a screenshot. ${fairy} does the rest.`}
+          onBack={() => router.back()}
+          backIcon="close"
+        />
+        <View style={styles.body}>
+          <Card style={{ gap: 12 }}>
+            <Text style={styles.label}>Paste a message</Text>
+            <TextInput
+              style={styles.input}
+              value={text}
+              onChangeText={setText}
+              placeholder="we should try Ramen Tatsu-Ya!"
+              placeholderTextColor={colors.muted}
+              multiline
+            />
+            <View style={styles.buttons}>
+              <Button label="Paste" variant="ghost" icon="link" onPress={paste} flex />
+              <Button label="Screenshot" variant="ghost" icon="plus" onPress={pickScreenshot} flex />
+            </View>
+            {image && (
+              <View style={styles.preview}>
+                <Image source={{ uri: image.uri }} style={styles.previewImg} contentFit="cover" />
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.previewTitle}>Screenshot ready</Text>
+                  <Pressable onPress={() => setImage(null)} hitSlop={10}>
+                    <Text style={styles.remove}>Remove</Text>
+                  </Pressable>
+                </View>
+              </View>
+            )}
+          </Card>
+
+          {groups.length > 0 && (
+            <Card style={{ gap: 12 }}>
+              <Text style={styles.label}>Who’s thinking about it?</Text>
+              <Text style={styles.hint}>Add it to a circle (optional)</Text>
+              <View style={styles.chips}>
+                {groups.map((g) => (
+                  <Chip key={g.id} label={g.name} selected={selected.includes(g.id)} onPress={() => toggleGroup(g.id)} />
+                ))}
+              </View>
+            </Card>
+          )}
+
+          {error && <Text style={styles.error}>{error}</Text>}
+
+          <Button
+            label={busy ? (image ? "Reading your screenshot…" : "Finding the place…") : "Make a card"}
+            variant="gold"
+            icon={busy ? undefined : "sparkle"}
+            loading={busy}
+            disabled={!canSubmit}
+            onPress={submit}
+          />
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  content: { padding: 18, paddingBottom: 48, gap: 10 },
-  title: {
-    fontSize: 22,
-    fontWeight: "800",
-    color: colors.ink,
-    marginBottom: 4,
-  },
-  label: { fontSize: 14, fontWeight: "700", color: colors.ink },
+  screen: { flex: 1, backgroundColor: colors.bg },
+  content: { paddingBottom: 48 },
+  body: { paddingHorizontal: 20, gap: 16 },
+  label: { fontFamily: fonts.display, fontSize: 20, fontWeight: "600", color: colors.ink },
+  hint: { fontSize: 13.5, fontWeight: "600", color: colors.muted, marginTop: -8 },
   input: {
-    minHeight: 110,
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.line,
-    borderRadius: 14,
+    minHeight: 120,
+    backgroundColor: "#fff",
+    borderWidth: 1.5,
+    borderColor: colors.lineStrong,
+    borderRadius: 16,
     padding: 14,
     fontSize: 16,
+    lineHeight: 22,
+    fontWeight: "600",
     color: colors.ink,
     textAlignVertical: "top",
   },
-  buttons: { flexDirection: "row", gap: 10, flexWrap: "wrap", marginTop: 6 },
-  flex: { flex: 1 },
-  btn: {
-    borderRadius: 999,
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  btnPrimary: { backgroundColor: colors.accent },
-  btnPrimaryText: { color: "#fff", fontWeight: "800", fontSize: 16 },
-  btnGhost: {
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.line,
-  },
-  btnGhostText: { color: colors.ink, fontWeight: "700", fontSize: 15 },
-  disabled: { opacity: 0.45 },
-  busy: { flexDirection: "row", alignItems: "center", gap: 10 },
-  preview: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 14,
-    marginTop: 8,
-  },
-  previewImg: {
-    width: 84,
-    height: 84,
-    borderRadius: 12,
-    backgroundColor: colors.line,
-  },
-  remove: { color: colors.accent, fontWeight: "700" },
+  buttons: { flexDirection: "row", gap: 10 },
+  preview: { flexDirection: "row", alignItems: "center", gap: 14 },
+  previewImg: { width: 72, height: 72, borderRadius: 14, backgroundColor: colors.lineSoft },
+  previewTitle: { fontSize: 15, fontWeight: "800", color: colors.ink },
+  remove: { color: colors.accent, fontWeight: "800", fontSize: 14, marginTop: 4 },
   chips: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
-  chip: {
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: colors.line,
-    backgroundColor: colors.card,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-  },
-  chipOn: { backgroundColor: colors.greenSoft, borderColor: colors.green },
-  chipText: { color: colors.ink, fontWeight: "600" },
-  chipTextOn: { color: "#2F6B52" },
-  error: { color: "#B3261E", marginTop: 12, lineHeight: 20 },
-  hint: { color: colors.muted, lineHeight: 20 },
+  error: { color: "#A32A22", fontWeight: "700", lineHeight: 20 },
 });

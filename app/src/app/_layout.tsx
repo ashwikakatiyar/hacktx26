@@ -1,37 +1,66 @@
+import {
+  Fraunces_400Regular,
+  Fraunces_500Medium,
+  Fraunces_600SemiBold,
+  Fraunces_700Bold,
+} from "@expo-google-fonts/fraunces";
+import {
+  Nunito_400Regular,
+  Nunito_500Medium,
+  Nunito_600SemiBold,
+  Nunito_700Bold,
+  Nunito_800ExtraBold,
+  Nunito_900Black,
+} from "@expo-google-fonts/nunito";
+import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
 import { colors } from "@/lib/theme";
 
+SplashScreen.preventAutoHideAsync().catch(() => {});
+
 export default function RootLayout() {
+  const [loaded, error] = useFonts({
+    Fraunces_400Regular,
+    Fraunces_500Medium,
+    Fraunces_600SemiBold,
+    Fraunces_700Bold,
+    Nunito_400Regular,
+    Nunito_500Medium,
+    Nunito_600SemiBold,
+    Nunito_700Bold,
+    Nunito_800ExtraBold,
+    Nunito_900Black,
+  });
+  const ready = loaded || !!error; // if a font fails, fall back to system fonts rather than a blank app
+
+  useEffect(() => {
+    if (ready) SplashScreen.hideAsync().catch(() => {});
+  }, [ready]);
+
+  if (!ready) return null;
+
   return (
     <>
       <StatusBar style="auto" />
       <Stack
         screenOptions={{
-          headerStyle: { backgroundColor: colors.bg },
-          headerTitleStyle: { color: colors.ink },
-          headerTintColor: colors.accent,
+          headerShown: false,
           headerShadowVisible: false,
           contentStyle: { backgroundColor: colors.bg },
         }}
       >
-        {/* Main app: Home, Village, Profile tabs. Each tab draws its own night-sky header. */}
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="onboarding"
-          options={{ headerShown: false, gestureEnabled: false }}
-        />
-        <Stack.Screen name="group/[id]" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="invite"
-          options={{ title: "Invite a friend", presentation: "modal" }}
-        />
-        {/* Phase 1 screens, unchanged apart from the new palette. */}
-        <Stack.Screen
-          name="add"
-          options={{ title: "Add an idea", presentation: "modal" }}
-        />
-        <Stack.Screen name="card/[id]" options={{ title: "Edit card" }} />
+        {/* Main app: Home, Village, Pixie, Profile tabs. Each draws its own night-sky or title header. */}
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="onboarding" options={{ gestureEnabled: false }} />
+        <Stack.Screen name="group/[id]" />
+        <Stack.Screen name="planner/[id]" />
+        {/* Modals draw their own header (ScreenHeader) so the title matches the rest of the app. */}
+        <Stack.Screen name="invite" options={{ presentation: "modal" }} />
+        <Stack.Screen name="add" options={{ presentation: "modal" }} />
+        <Stack.Screen name="card/[id]" />
       </Stack>
     </>
   );

@@ -1,4 +1,5 @@
 import Svg, { Circle, Path, Rect } from "react-native-svg";
+import { decorative } from "@/lib/a11y";
 
 export type IconName =
   | "home"
@@ -13,7 +14,12 @@ export type IconName =
   | "check"
   | "gear"
   | "calendar"
-  | "link";
+  | "link"
+  | "close"
+  | "pin"
+  | "clock"
+  | "plus"
+  | "users";
 
 // Stroke icons drawn on a 24x24 grid, matching the mockup's line weight.
 export function Icon({
@@ -39,8 +45,7 @@ export function Icon({
       width={size}
       height={size}
       viewBox="0 0 24 24"
-      accessibilityElementsHidden
-      importantForAccessibility="no"
+      {...decorative}
     >
       {name === "home" && (
         <>
@@ -104,6 +109,27 @@ export function Icon({
           <Rect x={3.5} y={5} width={17} height={15} rx={3} {...stroke} />
           <Path d="M8 3v4M16 3v4M3.5 10h17" {...stroke} />
           <Path d="M8.5 14.5l2 2 4-4" {...stroke} />
+        </>
+      )}
+      {name === "close" && <Path d="M6 6l12 12M18 6L6 18" {...stroke} />}
+      {name === "plus" && <Path d="M12 5v14M5 12h14" {...stroke} />}
+      {name === "pin" && (
+        <>
+          <Path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0113 0c0 5.4-6.5 11-6.5 11z" {...stroke} />
+          <Circle cx={12} cy={10} r={2.4} {...stroke} />
+        </>
+      )}
+      {name === "clock" && (
+        <>
+          <Circle cx={12} cy={12} r={8.5} {...stroke} />
+          <Path d="M12 7.5V12l3 2" {...stroke} />
+        </>
+      )}
+      {name === "users" && (
+        <>
+          <Circle cx={9} cy={9} r={3.2} {...stroke} />
+          <Path d="M3 19c.6-3.3 3-5 6-5s5.4 1.7 6 5" {...stroke} />
+          <Path d="M16 6.2a3 3 0 010 5.6M18.5 14.4c1.4.7 2.3 2.1 2.5 4.1" {...stroke} />
         </>
       )}
       {name === "link" && (

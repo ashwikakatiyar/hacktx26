@@ -1,12 +1,12 @@
 import { useSyncExternalStore } from "react";
 
 // Your fairy's name and look. Kept in memory for now (resets when the app reloads); persist it with the user profile later.
-export type FairyLook = { wing: string; dress: string; hair: string };
+export type FairyLook = { wing: string; dress: string; hair: string; skin: string };
 export type Fairy = { name: string; look: FairyLook };
 
 export const FAIRY_DEFAULT: Fairy = {
   name: "Pixie",
-  look: { wing: "#BFA8F0", dress: "#F29BB8", hair: "#6B3F2A" },
+  look: { wing: "#BFA8F0", dress: "#F29BB8", hair: "#6B3F2A", skin: "#F4D5B5" },
 };
 
 let current: Fairy = FAIRY_DEFAULT;
@@ -48,4 +48,13 @@ export const HAIR_SWATCHES = [
   { c: "#2B2347", name: "Midnight hair" },
   { c: "#D97A4A", name: "Copper hair" },
   { c: "#F2D27A", name: "Blonde hair" },
+];
+
+export const SKIN_SWATCHES = [
+  { c: "#F9E4D4", name: "Porcelain skin" },
+  { c: "#F4D5B5", name: "Peach skin" },
+  { c: "#DCAA80", name: "Golden skin" },
+  { c: "#B97B54", name: "Warm brown skin" },
+  { c: "#8C553B", name: "Deep brown skin" },
+  { c: "#593729", name: "Rich brown skin" },
 ];

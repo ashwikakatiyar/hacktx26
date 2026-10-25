@@ -1,37 +1,63 @@
-import { Platform } from "react-native";
+import type { ViewStyle } from "react-native";
 
-// Palette from the "Fairytale Friends" mockup (night purple + lantern gold).
-// The original keys (bg, card, ink, muted, line, accent, accentSoft, green, greenSoft) are kept
-// so the Phase 1 screens (add.tsx, card/[id].tsx, CardView) pick up the new look automatically.
+// Palette: "Fairytale Friends". Night plum, parchment cards, lantern gold, and a lavender accent.
+// Contrast notes (WCAG AA): ink/muted on card >= 5:1, accent on card >= 4.5:1, white on accent/green >= 4.5:1.
+// The original keys are kept so every screen picks the new values up automatically.
 export const colors = {
-  // Figma storybook palette (screens 01–11)
-  bg: "#DDE2EA",
-  card: "#FCF7E9",
-  ink: "#4D4038",
-  muted: "#72675E",
-  line: "#65554A",
-  lineSoft: "#D4C8B9",
-  accent: "#918CC8",
-  accentSoft: "#E6DDF1",
-  green: "#698C77",
-  greenSoft: "#DCE8D7",
-  night: "#4D4038",
-  night2: "#64564E",
-  night3: "#39312C",
-  onNight: "#FCF7E9",
+  bg: "#E1E5EE",
+  card: "#FFFBF0", // parchment
+  cardAlt: "#F7F0E0", // a notch darker, for inset areas
+  ink: "#43362F",
+  muted: "#6A5F57",
+  line: "#E2D6C3", // soft card border
+  lineSoft: "#ECE3D2", // dividers
+  lineStrong: "#B5A594", // inputs and outline buttons
+  accent: "#7568B5",
+  accentDeep: "#5A4E99",
+  accentSoft: "#EAE3F5",
+  green: "#4F7A5E",
+  greenSoft: "#DDEBD6",
+  night: "#3E3230",
+  night2: "#54443F",
+  night3: "#2F2624",
+  nightTop: "#2B2140", // top of the sky gradient
+  nightMid: "#4A3A5E",
+  onNight: "#FFF8E6",
   gold: "#F1C45B",
+  goldDeep: "#D9A12E",
   goldSoft: "#FFF1C9",
   lavender: "#CBB8DE",
   mint: "#B9D9C6",
   rose: "#E9B5B8",
   butter: "#F1C45B",
-  tagLavender: "#E4DAF0",
+  tagLavender: "#E8DFF3",
+  grass: "#DFE8CB",
+  grassDeep: "#C9D9B0",
 };
 
-// Display font for headings. The mockup uses Cormorant Garamond; this falls back to a system serif
-// so no extra packages are needed. To use the real font, load it with expo-font and change it here only.
+// Fonts: Fraunces (soft storybook serif) for headings, Nunito (rounded) for everything else.
+// These are logical names; the Text wrapper in components/Text.tsx maps them plus fontWeight to the real font files.
 export const fonts = {
-  display: Platform.select({ ios: "Inter", android: "sans-serif", default: "Inter, Arial, sans-serif" }) as string,
+  display: "Fraunces",
+  body: "Nunito",
+};
+
+export const radius = { sm: 12, md: 16, lg: 22, pill: 999 } as const;
+
+// Soft, warm shadows instead of heavy outlines. boxShadow works on iOS, Android and web.
+export const shadow = {
+  card: { boxShadow: "0 2px 10px rgba(67, 54, 47, 0.08), 0 1px 2px rgba(67, 54, 47, 0.06)" } as ViewStyle,
+  lift: { boxShadow: "0 8px 24px rgba(67, 54, 47, 0.16), 0 2px 6px rgba(67, 54, 47, 0.08)" } as ViewStyle,
+  glow: { boxShadow: "0 4px 14px rgba(241, 196, 91, 0.55)" } as ViewStyle,
+};
+
+// Shared look for a parchment card.
+export const cardSurface: ViewStyle = {
+  backgroundColor: colors.card,
+  borderWidth: 1,
+  borderColor: colors.line,
+  borderRadius: radius.lg,
+  ...shadow.card,
 };
 
 export const ACTIVITY_TYPES = [

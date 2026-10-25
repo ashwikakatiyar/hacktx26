@@ -1,6 +1,7 @@
 import { Image, View } from "react-native";
 import Svg, { Circle, G, Path, Rect } from "react-native-svg";
 import type { CottageState } from "@/lib/config";
+import { decorative } from "@/lib/a11y";
 
 // The cottage illustration in its three states. Drawn on an 84x96 grid; the profile photo sits on top (see CottagePlot).
 //   thriving  : fresh paint, glowing windows, flowers  (hung out in the last 14 days)
@@ -133,8 +134,7 @@ export function OpenPlot({
         width="100%"
         height="100%"
         viewBox="0 0 84 96"
-        accessibilityElementsHidden
-        importantForAccessibility="no"
+        {...decorative}
       >
         <Rect x={0} y={84} width={84} height={12} fill="#7FBF98" />
         <Rect
@@ -167,8 +167,7 @@ export function GhostCottage({
         width="100%"
         height="100%"
         viewBox="0 0 84 96"
-        accessibilityElementsHidden
-        importantForAccessibility="no"
+        {...decorative}
       >
         <Rect x={0} y={84} width={84} height={12} fill="#CFC6E6" />
         <Rect x={16} y={50} width={52} height={34} fill="#D9D1EC" />

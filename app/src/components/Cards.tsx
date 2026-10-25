@@ -1,12 +1,17 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { Avatar, AvatarStack } from "@/components/Avatar";
 import { Icon } from "@/components/Icon";
 import { PriceTag } from "@/components/CardView";
 import { PlaceArt } from "@/components/PlaceArt";
+import { Text } from "@/components/Text";
+import { Pill } from "@/components/ui";
 import { whenLabel, plural } from "@/lib/dates";
 import { useFairy } from "@/lib/fairy";
-import { colors, fonts } from "@/lib/theme";
+import { cardSurface, colors, fonts } from "@/lib/theme";
 import { PEOPLE, type EventItem, type Group, type Idea } from "@/mock/data";
+
+const pressed = ({ pressed }: { pressed: boolean }) =>
+  pressed ? { transform: [{ scale: 0.985 }], opacity: 0.95 } : null;
 
 // Confirmed plan: place art, status, price range, name, type and address, when.
 export function EventCard({
@@ -18,35 +23,33 @@ export function EventCard({
   compact?: boolean;
   onPress?: () => void;
 }) {
-  const size = compact ? 80 : 96;
+  const size = compact ? 76 : 92;
   return (
     <Pressable
       onPress={onPress}
       disabled={!onPress}
       accessibilityRole={onPress ? "button" : undefined}
-      style={styles.row}
+      style={(s) => [styles.row, pressed(s)]}
     >
-      <PlaceArt
-        type={event.activityType}
-        imageUrl={event.imageUrl}
-        size={size}
-      />
+      <PlaceArt type={event.activityType} imageUrl={event.imageUrl} size={size} seed={event.title} />
       <View style={styles.rowBody}>
         <View style={styles.inline}>
-          {!compact && (
-            <View style={styles.confirmed}>
-              <Text style={styles.confirmedText}>Confirmed</Text>
-            </View>
-          )}
+          {!compact && <Pill label="Confirmed" icon="check" bg={colors.green} fg="#fff" />}
           <PriceTag level={event.priceLevel} />
         </View>
         <Text style={styles.title} numberOfLines={2}>
           {event.title}
         </Text>
-        <Text style={styles.meta} numberOfLines={1}>
-          {capitalize(event.activityType)} · {event.address}
-        </Text>
-        <Text style={styles.when}>{whenLabel(event.startsAt)}</Text>
+        <View style={styles.inline}>
+          <Icon name="pin" size={13} color={colors.muted} strokeWidth={2.2} />
+          <Text style={[styles.meta, { flex: 1 }]} numberOfLines={1}>
+            {capitalize(event.activityType)} · {event.address}
+          </Text>
+        </View>
+        <View style={styles.inline}>
+          <Icon name="clock" size={13} color={colors.accent} strokeWidth={2.4} />
+          <Text style={styles.when}>{whenLabel(event.startsAt)}</Text>
+        </View>
       </View>
     </Pressable>
   );
@@ -69,61 +72,38 @@ export function GroupCard({
       onPress={onPress}
       accessibilityRole="button"
       accessibilityLabel={`${group.name}, ${plural(friends, "friend")}, ${plural(ideaCount, "idea")} brewing`}
-      style={[styles.row, styles.groupRow]}
+      style={(s) => [styles.row, styles.groupRow, pressed(s)]}
     >
-      <AvatarStack people={members} size={40} max={3} />
+      <AvatarStack people={members} size={38} max={3} borderColor={colors.card} />
       <View style={styles.groupBody}>
         <Text style={styles.title} numberOfLines={1}>
           {group.name}
         </Text>
-        <Text style={styles.meta}>
-          {plural(friends, "friend")} · {plural(ideaCount, "idea")} brewing
+        <Text style={styles.meta} numberOfLines={1}>
+          {plural(friends, "friend")} · ✦ {plural(ideaCount, "idea")} brewing
         </Text>
       </View>
-      <Icon
-        name="chevron-right"
-        size={20}
-        color={colors.accent}
-        strokeWidth={2.4}
-      />
+      <Icon name="chevron-right" size={20} color={colors.accent} strokeWidth={2.4} />
     </Pressable>
   );
 }
 
-const SOURCE_TAG = (
-  idea: Idea,
-  fairy: string,
-): { label: string; bg: string } => {
+const SOURCE_TAG = (idea: Idea, fairy: string): { label: string; bg: string } => {
   const who = idea.sourceBy ? PEOPLE[idea.sourceBy]?.name : null;
   switch (idea.source) {
     case "pixie":
       return { label: `${fairy}’s pick`, bg: colors.butter };
     case "screenshot":
-      return {
-        label: who ? `From ${who}’s screenshot` : "From a screenshot",
-        bg: colors.tagLavender,
-      };
+      return { label: who ? `From ${who}’s screenshot` : "From a screenshot", bg: colors.tagLavender };
     case "chat":
-      return {
-        label: who ? `From ${who} in the chat` : "From the chat",
-        bg: colors.tagLavender,
-      };
+      return { label: who ? `From ${who} in the chat` : "From the chat", bg: colors.tagLavender };
     default:
-      return {
-        label: who ? `From ${who}’s text` : "From a message",
-        bg: colors.tagLavender,
-      };
+      return { label: who ? `From ${who}’s text` : "From a message", bg: colors.tagLavender };
   }
 };
 
 // An idea in a group's pot, with a tag showing where it came from.
-export function IdeaCard({
-  idea,
-  onPress,
-}: {
-  idea: Idea;
-  onPress?: () => void;
-}) {
+export function IdeaCard({ idea, onPress }: { idea: Idea; onPress?: () => void }) {
   const { name: fairy } = useFairy();
   const tag = SOURCE_TAG(idea, fairy);
   const by = idea.sourceBy ? PEOPLE[idea.sourceBy] : null;
@@ -132,17 +112,15 @@ export function IdeaCard({
       onPress={onPress}
       disabled={!onPress}
       accessibilityRole={onPress ? "button" : undefined}
-      style={styles.row}
+      style={(s) => [styles.row, pressed(s)]}
     >
-      <PlaceArt type={idea.activityType} imageUrl={idea.imageUrl} size={88} />
+      <PlaceArt type={idea.activityType} imageUrl={idea.imageUrl} size={88} seed={idea.name} />
       <View style={styles.rowBody}>
-        <View style={styles.inline}>
-          <View style={[styles.tag, { backgroundColor: tag.bg }]}>
-            {by && <Avatar person={by} size={16} />}
-            <Text style={styles.tagText} numberOfLines={1}>
-              {tag.label}
-            </Text>
-          </View>
+        <View style={[styles.tag, { backgroundColor: tag.bg }]}>
+          {by && <Avatar person={by} size={16} />}
+          <Text style={styles.tagText} numberOfLines={1}>
+            {tag.label}
+          </Text>
         </View>
         <Text style={styles.title} numberOfLines={2}>
           {idea.name}
@@ -159,57 +137,49 @@ export function IdeaCard({
   );
 }
 
-const capitalize = (s: string) =>
-  s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+const capitalize = (s: string) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
 
 const styles = StyleSheet.create({
   row: {
+    ...cardSurface,
     flexDirection: "row",
-    gap: 12,
-    padding: 10,
-    backgroundColor: colors.card,
-    borderWidth: 1,
-    borderColor: colors.line,
-    borderRadius: 18,
+    gap: 14,
+    padding: 12,
+    borderRadius: 22,
   },
-  rowBody: { flex: 1, minWidth: 0, gap: 3, justifyContent: "center" },
-  inline: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    flexWrap: "wrap",
-  },
-  groupRow: { alignItems: "center", gap: 14, padding: 14 },
+  rowBody: { flex: 1, minWidth: 0, gap: 4, justifyContent: "center" },
+  inline: { flexDirection: "row", alignItems: "center", gap: 6, flexWrap: "wrap" },
+  groupRow: { alignItems: "center", gap: 12, padding: 14 },
   groupBody: { flex: 1, minWidth: 0 },
   title: {
     fontFamily: fonts.display,
-    fontSize: 19,
-    fontWeight: "700",
+    fontSize: 20,
+    fontWeight: "600",
     color: colors.ink,
-    lineHeight: 22,
+    lineHeight: 24,
+    letterSpacing: -0.2,
   },
   meta: { fontSize: 13, fontWeight: "600", color: colors.muted },
   when: { fontSize: 13, fontWeight: "800", color: colors.accent },
-  confirmed: {
-    backgroundColor: colors.green,
+  ideas: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    backgroundColor: colors.goldSoft,
     borderRadius: 999,
     paddingHorizontal: 9,
-    paddingVertical: 2,
+    paddingVertical: 4,
   },
-  confirmedText: { color: "#fff", fontSize: 12, fontWeight: "800" },
+  ideasText: { fontSize: 13, fontWeight: "800", color: colors.ink },
   tag: {
     flexDirection: "row",
     alignItems: "center",
     gap: 5,
     borderRadius: 999,
     paddingHorizontal: 9,
-    paddingVertical: 2,
+    paddingVertical: 3,
+    alignSelf: "flex-start",
     maxWidth: "100%",
   },
-  tagText: {
-    fontSize: 12,
-    fontWeight: "800",
-    color: colors.ink,
-    flexShrink: 1,
-  },
+  tagText: { fontSize: 12, fontWeight: "800", color: colors.ink, flexShrink: 1 },
 });

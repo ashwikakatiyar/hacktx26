@@ -1,14 +1,8 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { ScreenHeader } from "@/components/ui";
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { Text, TextInput } from "@/components/Text";
 import { CardView } from "@/components/CardView";
 import { api, type Card } from "@/lib/api";
 import { ACTIVITY_EMOJI, ACTIVITY_TYPES, colors } from "@/lib/theme";
@@ -59,7 +53,7 @@ export default function EditCard() {
 
   if (!card) {
     return (
-      <View style={styles.center}>
+      <View style={[styles.center, { backgroundColor: colors.bg }]}>
         {error ? (
           <Text style={styles.error}>{error}</Text>
         ) : (
@@ -81,9 +75,12 @@ export default function EditCard() {
 
   return (
     <ScrollView
+      style={{ flex: 1, backgroundColor: colors.bg }}
       contentContainerStyle={styles.content}
       keyboardShouldPersistTaps="handled"
     >
+      <ScreenHeader title="Edit card" subtitle="Fix anything Pixie missed." />
+      <View style={{ paddingHorizontal: 20, gap: 8 }}>
       <CardView card={preview} />
 
       <Text style={styles.label}>Name</Text>
@@ -148,12 +145,13 @@ export default function EditCard() {
       >
         <Text style={styles.saveText}>{saving ? "Saving…" : "Save"}</Text>
       </Pressable>
+      </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  content: { padding: 18, paddingBottom: 48, gap: 8 },
+  content: { paddingBottom: 48 },
   center: {
     flex: 1,
     alignItems: "center",
@@ -164,8 +162,8 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: colors.card,
     borderWidth: 1,
-    borderColor: colors.line,
-    borderRadius: 12,
+    borderColor: colors.lineStrong,
+    borderRadius: 14,
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 16,
@@ -174,24 +172,24 @@ const styles = StyleSheet.create({
   chips: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   chip: {
     borderRadius: 999,
-    borderWidth: 1,
-    borderColor: colors.line,
+    borderWidth: 1.5,
+    borderColor: colors.lineStrong,
     backgroundColor: colors.card,
     paddingHorizontal: 14,
     paddingVertical: 8,
   },
-  chipOn: { backgroundColor: colors.accentSoft, borderColor: colors.accent },
+  chipOn: { backgroundColor: colors.accent, borderColor: colors.accent },
   chipText: {
     color: colors.ink,
     fontWeight: "600",
     textTransform: "capitalize",
   },
-  chipTextOn: { color: colors.accent },
+  chipTextOn: { color: "#fff" },
   error: { color: "#B3261E", marginTop: 10, lineHeight: 20 },
   save: {
     marginTop: 22,
     backgroundColor: colors.accent,
-    borderRadius: 999,
+    borderRadius: 16,
     paddingVertical: 15,
     alignItems: "center",
   },

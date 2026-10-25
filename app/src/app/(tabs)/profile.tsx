@@ -1,13 +1,15 @@
 import { router } from "expo-router";
 import { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { Text } from "@/components/Text";
 import { Avatar } from "@/components/Avatar";
 import { EventCard } from "@/components/Cards";
 import { Icon } from "@/components/Icon";
 import { NightHeader } from "@/components/NightHeader";
 import { SpendingChart } from "@/components/SpendingChart";
 import { plural } from "@/lib/dates";
-import { colors, fonts } from "@/lib/theme";
+import { cardSurface, colors, fonts } from "@/lib/theme";
+import { SectionTitle } from "@/components/ui";
 import {
   EVENTS,
   GROUPS,
@@ -37,9 +39,9 @@ export default function Profile() {
         <View style={styles.headRow}>
           <Avatar
             person={ME}
-            size={76}
+            size={80}
             border={3}
-            borderColor={colors.goldSoft}
+            borderColor={colors.gold}
           />
           <View style={styles.headBody}>
             <Text style={styles.h1}>{ME.name}</Text>
@@ -68,7 +70,7 @@ export default function Profile() {
 
       <View style={styles.main}>
         <View>
-          <Text style={styles.h2}>Your confirmed plans</Text>
+          <SectionTitle>Your confirmed plans</SectionTitle>
           <View style={styles.list}>
             {EVENTS.map((e) => (
               <EventCard key={e.id} event={e} compact />
@@ -89,7 +91,7 @@ export default function Profile() {
         </View>
 
         <View>
-          <Text style={styles.h2}>What you owe</Text>
+          <SectionTitle>What you owe</SectionTitle>
           <View style={styles.oweCard}>
             {owes.length === 0 ? (
               <Text style={styles.allSquare}>
@@ -142,10 +144,11 @@ const styles = StyleSheet.create({
   headBody: { flex: 1 },
   h1: {
     fontFamily: fonts.display,
-    fontSize: 34,
-    lineHeight: 36,
-    fontWeight: "700",
+    fontSize: 38,
+    lineHeight: 44,
+    fontWeight: "600",
     color: "#fff",
+    letterSpacing: -0.5,
   },
   headSub: {
     fontSize: 14,
@@ -170,7 +173,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  main: { paddingHorizontal: 20, paddingTop: 18, gap: 20 },
+  main: { paddingHorizontal: 20, paddingTop: 4, gap: 24 },
   h2: {
     fontFamily: fonts.display,
     fontSize: 24,
@@ -182,11 +185,8 @@ const styles = StyleSheet.create({
   muted: { fontSize: 13, fontWeight: "700", color: colors.muted },
 
   card: {
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: colors.line,
-    borderRadius: 20,
-    paddingHorizontal: 14,
+    ...cardSurface,
+    paddingHorizontal: 16,
     paddingTop: 14,
     paddingBottom: 10,
   },
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontFamily: fonts.display,
     fontSize: 24,
-    fontWeight: "700",
+    fontWeight: "600",
     color: colors.ink,
   },
   thisMonth: {
@@ -210,14 +210,7 @@ const styles = StyleSheet.create({
   },
   thisMonthAmt: { fontSize: 15, fontWeight: "800", color: colors.ink },
 
-  oweCard: {
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: colors.line,
-    borderRadius: 20,
-    paddingHorizontal: 14,
-    paddingVertical: 4,
-  },
+  oweCard: { ...cardSurface, paddingHorizontal: 16, paddingVertical: 4 },
   oweRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -231,20 +224,18 @@ const styles = StyleSheet.create({
   oweAmt: {
     fontFamily: fonts.display,
     fontSize: 22,
-    fontWeight: "700",
+    fontWeight: "600",
     color: colors.ink,
   },
   pay: {
     minHeight: 44,
     paddingHorizontal: 14,
     borderRadius: 12,
-    borderWidth: 1.5,
-    borderColor: colors.accent,
-    backgroundColor: "#fff",
+    backgroundColor: colors.accent,
     alignItems: "center",
     justifyContent: "center",
   },
-  payText: { fontSize: 13, fontWeight: "800", color: colors.accent },
+  payText: { fontSize: 14, fontWeight: "800", color: "#fff" },
   allSquare: {
     fontSize: 14,
     fontWeight: "600",

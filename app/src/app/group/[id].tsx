@@ -1,19 +1,14 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import {
-  Alert,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Alert, Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { Text } from "@/components/Text";
 import { AvatarStack } from "@/components/Avatar";
 import { IdeaCard } from "@/components/Cards";
 import { Icon } from "@/components/Icon";
 import { NightHeader } from "@/components/NightHeader";
 import { useFairy } from "@/lib/fairy";
-import { colors, fonts } from "@/lib/theme";
+import { cardSurface, colors, fonts } from "@/lib/theme";
+import { BackButton, Chip, SectionTitle } from "@/components/ui";
 import { FREQUENCIES } from "@/mock/options";
 import { PEOPLE, groupById, ideasForGroup } from "@/mock/data";
 
@@ -50,19 +45,7 @@ export default function GroupPage() {
     >
       <NightHeader>
         <View style={styles.titleRow}>
-          <Pressable
-            onPress={() => router.back()}
-            accessibilityRole="button"
-            accessibilityLabel="Back"
-            style={styles.back}
-          >
-            <Icon
-              name="chevron-left"
-              size={22}
-              color={colors.ink}
-              strokeWidth={2.4}
-            />
-          </Pressable>
+          <BackButton onDark />
           <Text style={styles.h1} numberOfLines={2}>
             {group.name}
           </Text>
@@ -72,7 +55,7 @@ export default function GroupPage() {
             people={members}
             size={44}
             border={2}
-            borderColor={colors.night}
+            borderColor={colors.nightMid}
             max={5}
           />
           <Pressable
@@ -95,22 +78,9 @@ export default function GroupPage() {
           <Text style={styles.h2}>Friendship goals</Text>
           <Text style={styles.label}>How often do we want to meet?</Text>
           <View style={styles.freqRow}>
-            {FREQUENCIES.map((f) => {
-              const on = freq === f.days;
-              return (
-                <Pressable
-                  key={f.days}
-                  onPress={() => setFreq(f.days)}
-                  accessibilityRole="button"
-                  accessibilityState={{ selected: on }}
-                  style={[styles.freq, on && styles.freqOn]}
-                >
-                  <Text style={[styles.freqText, on && styles.freqTextOn]}>
-                    {f.label}
-                  </Text>
-                </Pressable>
-              );
-            })}
+            {FREQUENCIES.map((f) => (
+              <Chip key={f.days} label={f.label} selected={freq === f.days} onPress={() => setFreq(f.days)} />
+            ))}
           </View>
           <Text style={[styles.label, { marginTop: 2 }]}>What we’re into</Text>
           <View style={styles.tags}>
@@ -129,14 +99,15 @@ export default function GroupPage() {
           style={styles.ask}
         >
           <Icon name="sparkle" size={28} color={colors.ink} />
-          <View>
+          <View style={{ flex: 1 }}>
             <Text style={styles.askTitle}>We should do something…</Text>
             <Text style={styles.askSub}>Ask {fairy} what to do</Text>
           </View>
+          <Icon name="chevron-right" size={22} color={colors.ink} strokeWidth={2.6} />
         </Pressable>
 
         <View>
-          <Text style={styles.h2Plain}>Ideas in the pot</Text>
+          <SectionTitle>Ideas in the pot</SectionTitle>
           <View style={styles.list}>
             {ideas.length === 0 ? (
               <Text style={styles.empty}>
@@ -168,10 +139,11 @@ const styles = StyleSheet.create({
   h1: {
     flex: 1,
     fontFamily: fonts.display,
-    fontSize: 34,
-    lineHeight: 36,
-    fontWeight: "700",
+    fontSize: 36,
+    lineHeight: 42,
+    fontWeight: "600",
     color: "#fff",
+    letterSpacing: -0.5,
   },
   peopleRow: {
     flexDirection: "row",
@@ -190,23 +162,16 @@ const styles = StyleSheet.create({
   },
   inviteText: { fontSize: 14, fontWeight: "800", color: colors.goldSoft },
 
-  main: { paddingHorizontal: 20, paddingTop: 18, gap: 18 },
-  goals: {
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: colors.line,
-    borderRadius: 20,
-    padding: 14,
-    gap: 10,
-  },
+  main: { paddingHorizontal: 20, paddingTop: 4, gap: 20 },
+  goals: { ...cardSurface, padding: 16, gap: 10 },
   h2: {
     fontFamily: fonts.display,
     fontSize: 22,
-    fontWeight: "700",
+    fontWeight: "600",
     color: colors.ink,
   },
   label: { fontSize: 13, fontWeight: "700", color: colors.muted },
-  freqRow: { flexDirection: "row", gap: 8 },
+  freqRow: { flexDirection: "row", gap: 8, flexWrap: "wrap" },
   freq: {
     flex: 1,
     minHeight: 44,
@@ -236,21 +201,21 @@ const styles = StyleSheet.create({
   tagText: { fontSize: 13, fontWeight: "700", color: colors.ink },
 
   ask: {
-    minHeight: 64,
-    borderRadius: 18,
+    minHeight: 72,
+    borderRadius: 22,
     backgroundColor: colors.gold,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    gap: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    gap: 14,
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+    boxShadow: "0 4px 0 #D9A12E, 0 10px 20px rgba(217,161,46,0.25)",
   },
   askTitle: {
     fontFamily: fonts.display,
     fontSize: 22,
-    lineHeight: 24,
-    fontWeight: "700",
+    lineHeight: 26,
+    fontWeight: "600",
     color: colors.ink,
   },
   askSub: { fontSize: 13, fontWeight: "700", color: colors.ink },

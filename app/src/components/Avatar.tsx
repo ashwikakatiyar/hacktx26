@@ -1,12 +1,7 @@
 import { Image } from "expo-image";
 import { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  type StyleProp,
-  type ViewStyle,
-} from "react-native";
+import { StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
+import { Text } from "@/components/Text";
 import { colors } from "@/lib/theme";
 
 export type AvatarPerson = {
@@ -20,7 +15,7 @@ export function Avatar({
   person,
   size = 44,
   border = 0,
-  borderColor = "#FFFFFF",
+  borderColor = colors.card,
   style,
 }: {
   person: AvatarPerson;
@@ -74,7 +69,7 @@ export function AvatarStack({
   people,
   size = 40,
   border = 2,
-  borderColor = "#FFFFFF",
+  borderColor = colors.card,
   max = 5,
 }: {
   people: AvatarPerson[];

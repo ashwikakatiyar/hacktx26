@@ -26,7 +26,7 @@ export function SpendingChart({ months }: { months: Month[] }) {
       style={{ aspectRatio: 340 / 170 }}
       accessibilityLabel={`Bar chart of monthly spending on outings: ${summary}`}
     >
-      <G stroke={colors.lineSoft} strokeWidth={1}>
+      <G stroke={colors.lineSoft} strokeWidth={1} strokeDasharray="3 5">
         <Path d="M0 30H340" />
         <Path d="M0 70H340" />
         <Path d="M0 110H340" />
@@ -43,7 +43,7 @@ export function SpendingChart({ months }: { months: Month[] }) {
               y={base - h}
               width={barW}
               height={h}
-              rx={8}
+              rx={10}
               fill={current ? colors.gold : colors.lavender}
             />
             <SvgText
@@ -51,6 +51,7 @@ export function SpendingChart({ months }: { months: Month[] }) {
               y={base - h - 6}
               fontSize={12}
               fontWeight="800"
+              fontFamily="Nunito_800ExtraBold"
               fill={colors.ink}
               textAnchor="middle"
             >
@@ -61,6 +62,7 @@ export function SpendingChart({ months }: { months: Month[] }) {
               y={160}
               fontSize={12}
               fontWeight="700"
+              fontFamily="Nunito_700Bold"
               fill={colors.muted}
               textAnchor="middle"
             >

@@ -1,7 +1,49 @@
-import { SvgXml } from "react-native-svg";
-import type { FairyLook } from "@/lib/fairy";
-const original = '<svg width="58" height="79" viewBox="0 0 58 79" fill="none" xmlns="http://www.w3.org/2000/svg">\n<path d="M23.2783 34.2952C-6.87173 -4.51731 -6.87173 34.8577 22.3211 41.0452C-9.26459 42.1702 4.61398 71.4202 24.2354 43.2952" fill="#CBB9DF" stroke-width="1.08957" stroke-linecap="round" stroke-linejoin="round" stroke="#8264A1"/>\n<path d="M26.6282 37.1074L14.1853 66.9199H40.0282L26.6282 37.1074Z" fill="#E8B5B8" stroke-width="1.08957" stroke-linecap="round" stroke-linejoin="round" stroke="#503F35"/>\n<path d="M20.8855 67.4824L17.0569 77.6074M32.3712 67.4824L29.0212 77.6074M29.4998 41.0449C38.4331 48.5449 44.3355 46.4824 47.2069 34.8574M21.8426 42.1699L12.7498 51.7324" stroke-width="1.08957" stroke-linecap="round" stroke-linejoin="round" stroke="#503F35"/>\n<path d="M27.1068 38.2324C33.4502 38.2324 38.5925 32.1883 38.5925 24.7324C38.5925 17.2766 33.4502 11.2324 27.1068 11.2324C20.7634 11.2324 15.6211 17.2766 15.6211 24.7324C15.6211 32.1883 20.7634 38.2324 27.1068 38.2324Z" fill="#F4E3C6" stroke-width="1.08957" stroke-linecap="round" stroke-linejoin="round" stroke="#503F35"/>\n<path d="M26.6284 14.0449C29.8 14.0449 32.3712 11.0228 32.3712 7.29492C32.3712 3.567 29.8 0.544922 26.6284 0.544922C23.4567 0.544922 20.8855 3.567 20.8855 7.29492C20.8855 11.0228 23.4567 14.0449 26.6284 14.0449Z" fill="#805331" stroke-width="1.08957" stroke-linecap="round" stroke-linejoin="round" stroke="#503F35"/>\n<path d="M15.6211 21.9198C14.664 12.5448 18.4925 8.98233 27.1068 11.2323C34.764 11.6073 38.5925 15.9198 38.5925 24.1698C32.2116 21.5448 28.7021 18.1698 28.064 14.0448C25.5116 18.9198 21.364 21.5448 15.6211 21.9198Z" fill="#805331" stroke-width="1.08957" stroke-linecap="round" stroke-linejoin="round" stroke="#503F35"/>\n<path d="M23.2782 26.6453C23.6482 26.6453 23.9482 26.2927 23.9482 25.8578C23.9482 25.4229 23.6482 25.0703 23.2782 25.0703C22.9081 25.0703 22.6082 25.4229 22.6082 25.8578C22.6082 26.2927 22.9081 26.6453 23.2782 26.6453Z" fill="#503F35" stroke-width="1.08957" stroke-linecap="round" stroke-linejoin="round" stroke="#503F35"/>\n<path d="M31.4139 26.6453C31.7839 26.6453 32.0839 26.2927 32.0839 25.8578C32.0839 25.4229 31.7839 25.0703 31.4139 25.0703C31.0439 25.0703 30.7439 25.4229 30.7439 25.8578C30.7439 26.2927 31.0439 26.6453 31.4139 26.6453Z" fill="#503F35" stroke-width="1.08957" stroke-linecap="round" stroke-linejoin="round" stroke="#503F35"/>\n<path d="M25.1926 30.9199C26.7879 32.7949 28.3831 32.6074 29.9783 30.3574" stroke-width="1.08957" stroke-linecap="round" stroke-linejoin="round" stroke="#503F35"/>\n<path d="M45.7712 40.4824L51.5141 21.9199Z" fill="black"/>\n<path d="M45.7712 40.4824L51.5141 21.9199" stroke-width="1.08957" stroke-linecap="round" stroke-linejoin="round" stroke="#503F35"/>\n<path d="M51.514 15.1699L52.9498 19.1074H56.7783L53.9069 22.4824L54.864 26.9824L51.514 24.7324L48.164 26.9824L49.1212 22.4824L46.2498 19.1074H50.0783L51.514 15.1699Z" fill="#E8BD5B" stroke-width="1.08957" stroke-linecap="round" stroke-linejoin="round" stroke="#503F35"/>\n</svg>\n';
-export function FigmaFairy({size=104,look}:{size?:number;look?:FairyLook}) {
- const xml = look ? original.replaceAll("#CBB9DF",look.wing).replaceAll("#E8B5B8",look.dress).replaceAll("#77502F",look.hair) : original;
- return <SvgXml xml={xml} width={size} height={size*79/58} />;
+import Svg, { Circle, Ellipse, G, Path } from "react-native-svg";
+import { FAIRY_DEFAULT, type FairyLook } from "@/lib/fairy";
+
+export function FigmaFairy({ size = 104, look = FAIRY_DEFAULT.look }: { size?: number; look?: FairyLook }) {
+  const { wing, dress, hair, skin = FAIRY_DEFAULT.look.skin } = look;
+  const ink = "#503F45";
+  return (
+    <Svg width={size} height={size * 4 / 3} viewBox="0 0 120 160" accessibilityLabel="Your fairy">
+      <G fill={wing} stroke={wing} strokeWidth={1.5}>
+        <Path d="M54 79C32 75 8 49 13 33C18 18 49 42 55 68Z" fillOpacity={0.85} />
+        <Path d="M66 79C88 75 112 49 107 33C102 18 71 42 65 68Z" fillOpacity={0.85} />
+        <Path d="M54 80C29 73 15 89 23 101C31 113 49 100 56 88Z" fillOpacity={0.6} />
+        <Path d="M66 80C91 73 105 89 97 101C89 113 71 100 64 88Z" fillOpacity={0.6} />
+      </G>
+      <Path d="M51 70Q32 47 20 38M69 70Q88 47 100 38M49 85L29 96M71 85L91 96" fill="none" stroke="#FFFFFF" strokeOpacity={0.5} strokeWidth={1.2} strokeLinecap="round" />
+      <G fill="none" stroke={skin} strokeWidth={6} strokeLinecap="round">
+        <Path d="M54 120L51 143M66 120L69 143M51 77Q42 87 32 84M69 77Q80 87 89 73" />
+        <Path d="M60 61V76" strokeWidth={9} />
+      </G>
+      <G fill={dress} stroke={ink} strokeWidth={1.2} strokeLinejoin="round">
+        <Path d="M50 73Q60 79 70 73L67 88Q73 103 82 119Q71 130 60 123Q49 130 38 119Q47 103 53 88Z" />
+        <Path d="M48 141Q51 138 55 142L55 148H45Q44 144 48 141ZM65 142Q69 138 72 141L75 148H65Z" />
+      </G>
+      <Path d="M53 89Q60 92 67 89M60 97Q58 110 53 119" fill="none" stroke="#FFFFFF" strokeOpacity={0.55} strokeWidth={2} strokeLinecap="round" />
+      <Circle cx={60} cy={18} r={10} fill={hair} stroke={ink} strokeWidth={1.2} />
+      <Ellipse cx={60} cy={42} rx={21} ry={24} fill={hair} />
+      <Path d="M42 44L34 38Q33 50 43 52M78 44L86 38Q87 50 77 52" fill={skin} stroke={ink} strokeWidth={1} />
+      <Ellipse cx={60} cy={46} rx={18} ry={20} fill={skin} stroke={ink} strokeWidth={1.2} />
+      <Path d="M41 43Q36 22 56 21Q79 18 80 45Q66 42 60 30Q54 41 41 43Z" fill={hair} stroke={ink} strokeWidth={1.2} strokeLinejoin="round" />
+      <Path d="M53 24Q60 21 67 24" fill="none" stroke={dress} strokeWidth={3} strokeLinecap="round" />
+      <G fill={ink}>
+        <Ellipse cx={53} cy={47} rx={1.6} ry={2.2} />
+        <Ellipse cx={67} cy={47} rx={1.6} ry={2.2} />
+      </G>
+      <G fill="#EA8797" opacity={0.45}>
+        <Ellipse cx={48} cy={53} rx={3.5} ry={2} />
+        <Ellipse cx={72} cy={53} rx={3.5} ry={2} />
+      </G>
+      <Path d="M56 55Q60 59 64 55" fill="none" stroke={ink} strokeWidth={1.5} strokeLinecap="round" />
+      <Path d="M87 80L101 52" stroke="#E8BD5B" strokeWidth={2.5} strokeLinecap="round" />
+      <Path d="M103 40L105 47L112 49L106 53L107 60L101 56L95 59L97 52L92 47L100 47Z" fill="#F8D780" stroke="#BA8B45" strokeWidth={1} strokeLinejoin="round" />
+      <G fill="#F8D780">
+        <Circle cx={88} cy={33} r={1.6} />
+        <Circle cx={113} cy={69} r={1.3} />
+        <Circle cx={17} cy={117} r={1.6} />
+      </G>
+    </Svg>
+  );
 }

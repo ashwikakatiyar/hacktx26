@@ -1,19 +1,14 @@
 import * as Clipboard from "expo-clipboard";
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
+import { Text, TextInput } from "@/components/Text";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Icon } from "@/components/Icon";
 import { InviteList } from "@/components/InviteList";
 import { INVITE_LINK } from "@/lib/config";
-import { colors, fonts } from "@/lib/theme";
+import { cardSurface, colors, fonts } from "@/lib/theme";
+import { Button, ScreenHeader } from "@/components/ui";
 import { CONTACTS, groupById } from "@/mock/data";
 
 // One invite screen, used by "+ Invite a friend" on the group page, open plots in the village, and "+ New circle" on home.
@@ -59,11 +54,8 @@ export default function Invite() {
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
       >
-        <View>
-          <Text style={styles.h1}>{heading}</Text>
-          <Text style={styles.lede}>{lede}</Text>
-        </View>
-
+        <ScreenHeader title={heading} subtitle={lede} onBack={() => router.back()} backIcon="close" />
+        <View style={styles.body}>
         {isCircle && (
           <View style={styles.card}>
             <Text style={styles.label}>Name your circle</Text>
@@ -95,6 +87,7 @@ export default function Invite() {
             </Text>
           </Pressable>
         </View>
+        </View>
       </ScrollView>
 
       <View
@@ -103,15 +96,7 @@ export default function Invite() {
           { paddingBottom: Math.max(insets.bottom, 12) + 8 },
         ]}
       >
-        <Pressable
-          onPress={() => router.back()}
-          accessibilityRole="button"
-          style={styles.primary}
-        >
-          <Text style={styles.primaryText}>
-            {isCircle ? "Create circle" : "Done"}
-          </Text>
-        </Pressable>
+        <Button label={isCircle ? "Create circle" : "Done"} onPress={() => router.back()} />
       </View>
     </View>
   );
@@ -119,7 +104,8 @@ export default function Invite() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
-  content: { padding: 22, gap: 16 },
+  content: { paddingBottom: 24 },
+  body: { paddingHorizontal: 20, gap: 16 },
   h1: {
     fontFamily: fonts.display,
     fontSize: 30,
@@ -134,20 +120,13 @@ const styles = StyleSheet.create({
     color: colors.muted,
     marginTop: 4,
   },
-  card: {
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: colors.line,
-    borderRadius: 20,
-    padding: 14,
-    gap: 8,
-  },
+  card: { ...cardSurface, padding: 16, gap: 8 },
   label: { fontSize: 14, fontWeight: "800", color: colors.ink },
   input: {
     height: 48,
     borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: colors.line,
+    borderColor: colors.lineStrong,
     backgroundColor: "#fff",
     paddingHorizontal: 14,
     fontSize: 16,
@@ -180,7 +159,7 @@ const styles = StyleSheet.create({
   },
   darkBtnOn: { backgroundColor: colors.mint },
   darkBtnText: { fontSize: 14, fontWeight: "800", color: "#fff" },
-  footer: { paddingHorizontal: 22, paddingTop: 10, backgroundColor: colors.bg },
+  footer: { paddingHorizontal: 20, paddingTop: 10, backgroundColor: colors.bg },
   primary: {
     minHeight: 52,
     borderRadius: 16,

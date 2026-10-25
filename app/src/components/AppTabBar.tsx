@@ -1,5 +1,6 @@
 import { router, usePathname } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
+import { Text } from "@/components/Text";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Icon, type IconName } from "@/components/Icon";
 import { useFairy } from "@/lib/fairy";
@@ -29,7 +30,7 @@ export function AppTabBar() {
 
   const renderTab = (t: Tab) => {
     const focused = pathname === t.href;
-    const color = focused ? colors.accent : colors.muted;
+    const color = focused ? colors.accentDeep : colors.muted;
     return (
       <Pressable
         key={t.href}
@@ -39,7 +40,9 @@ export function AppTabBar() {
         accessibilityLabel={t.label}
         style={styles.tab}
       >
-        <Icon name={t.icon} size={24} color={color} />
+        <View style={[styles.iconWrap, focused && styles.iconWrapOn]}>
+          <Icon name={t.icon} size={23} color={color} strokeWidth={focused ? 2.3 : 2} />
+        </View>
         <Text
           style={[styles.label, { color, fontWeight: focused ? "800" : "700" }]}
           numberOfLines={1}
@@ -57,7 +60,7 @@ export function AppTabBar() {
         onPress={() => router.push("/add")}
         accessibilityRole="button"
         accessibilityLabel="Add an idea"
-        style={styles.add}
+        style={({ pressed }) => [styles.add, pressed && { transform: [{ scale: 0.95 }] }]}
       >
         <Icon name="sparkle" size={26} color={colors.ink} />
       </Pressable>
@@ -76,29 +79,34 @@ const styles = StyleSheet.create({
     backgroundColor: colors.card,
     borderTopWidth: 1,
     borderTopColor: colors.line,
+    boxShadow: "0 -6px 20px rgba(67, 54, 47, 0.08)",
   },
   tab: {
-    width: 64,
-    minHeight: 44,
+    width: 68,
+    minHeight: 48,
     alignItems: "center",
     justifyContent: "center",
     gap: 2,
   },
-  label: { fontSize: 12, maxWidth: 64 },
+  iconWrap: {
+    width: 52,
+    height: 30,
+    borderRadius: 15,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  iconWrapOn: { backgroundColor: colors.accentSoft },
+  label: { fontSize: 11.5, maxWidth: 68 },
   add: {
-    width: 56,
-    height: 56,
-    marginTop: -26,
-    borderRadius: 28,
+    width: 58,
+    height: 58,
+    marginTop: -28,
+    borderRadius: 29,
     backgroundColor: colors.gold,
     borderWidth: 4,
     borderColor: colors.card,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: colors.ink,
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 3 },
-    elevation: 4,
+    boxShadow: "0 6px 16px rgba(217, 161, 46, 0.55)",
   },
 });
