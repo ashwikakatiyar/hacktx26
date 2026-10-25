@@ -1,0 +1,3 @@
+import {query} from '@/lib/db';import {actor,positiveId,bad,member} from '@/lib/phase2';export const runtime='nodejs';
+export async function GET(req:Request,{params}:{params:Promise<{id:string}>}){const me=actor(req),id=positiveId((await params).id);if(!me||!id)return bad('invalid request');if(!await member(id,me))return bad('group not found or forbidden',403);
+ const debts=await query(`SELECT ex.payer_id,ex.owed_by, SUM(ex.amount)::text AS amount FROM expenses ex JOIN events e ON e.id=ex.event_id WHERE e.group_id=$1 AND ex.settled=false GROUP BY ex.payer_id,ex.owed_by ORDER BY ex.payer_id,ex.owed_by`,[id]);return Response.json({group_id:id,debts});}
