@@ -4,9 +4,19 @@
 import { inDays } from "@/lib/dates";
 import type { VillageFriend } from "@/lib/village";
 
-export type Person = { id: number; name: string; avatarUrl: string | null; tint: string };
+export type Person = {
+  id: number;
+  name: string;
+  avatarUrl: string | null;
+  tint: string;
+};
 
-const p = (id: number, name: string, tint: string, img: number | null): Person => ({
+const p = (
+  id: number,
+  name: string,
+  tint: string,
+  img: number | null,
+): Person => ({
   id,
   name,
   tint,
@@ -41,9 +51,27 @@ export type Group = {
 };
 
 export const GROUPS: Group[] = [
-  { id: 1, name: "Austin Crew", memberIds: [1, 2, 3, 4, 5], freqDays: 14, interests: ["Food", "Live music", "Cozy cafes"] },
-  { id: 2, name: "Study Break", memberIds: [1, 2, 4], freqDays: 14, interests: ["Coffee", "Board games"] },
-  { id: 3, name: "Weekend Crew", memberIds: [1, 6, 7, 8], freqDays: 30, interests: ["Outdoors", "Climbing", "Sunset hikes"] },
+  {
+    id: 1,
+    name: "Austin Crew",
+    memberIds: [1, 2, 3, 4, 5],
+    freqDays: 14,
+    interests: ["Food", "Live music", "Cozy cafes"],
+  },
+  {
+    id: 2,
+    name: "Study Break",
+    memberIds: [1, 2, 4],
+    freqDays: 14,
+    interests: ["Coffee", "Board games"],
+  },
+  {
+    id: 3,
+    name: "Weekend Crew",
+    memberIds: [1, 6, 7, 8],
+    freqDays: 30,
+    interests: ["Outdoors", "Climbing", "Sunset hikes"],
+  },
 ];
 
 export type IdeaSource = "pixie" | "text" | "screenshot" | "chat";
@@ -61,14 +89,94 @@ export type Idea = {
 };
 
 export const IDEAS: Idea[] = [
-  { id: 1, groupId: 1, name: "Ramen Tatsu-Ya", priceLevel: 2, activityType: "dinner", address: "8557 Research Blvd, Austin, TX", imageUrl: null, source: "text", sourceBy: 1 },
-  { id: 2, groupId: 1, name: "Bouldin Creek Café", priceLevel: 2, activityType: "dinner", address: "1900 S 1st St, Austin, TX", imageUrl: null, source: "text", sourceBy: 2 },
-  { id: 3, groupId: 1, name: "Barton Springs Pool", priceLevel: 1, activityType: "outdoors", address: "2131 William Barton Dr, Austin, TX", imageUrl: null, source: "screenshot", sourceBy: 3 },
-  { id: 4, groupId: 1, name: "Odd Duck", priceLevel: 3, activityType: "dinner", address: "1201 S Lamar Blvd, Austin, TX", imageUrl: null, source: "text", sourceBy: 5 },
-  { id: 5, groupId: 1, name: "Mozart’s Coffee Roasters", priceLevel: 2, activityType: "coffee", address: "3825 Lake Austin Blvd, Austin, TX", imageUrl: null, source: "screenshot", sourceBy: 4 },
-  { id: 6, groupId: 1, name: "Continental Club", priceLevel: 2, activityType: "music", address: "1315 S Congress Ave, Austin, TX", imageUrl: null, source: "pixie", sourceBy: null },
-  { id: 7, groupId: 2, name: "Mozart’s Coffee Roasters", priceLevel: 2, activityType: "coffee", address: "3825 Lake Austin Blvd, Austin, TX", imageUrl: null, source: "screenshot", sourceBy: 4 },
-  { id: 8, groupId: 3, name: "Austin Bouldering Project", priceLevel: 2, activityType: "outdoors", address: "979 Springdale Rd, Austin, TX", imageUrl: null, source: "text", sourceBy: 6 },
+  {
+    id: 1,
+    groupId: 1,
+    name: "Ramen Tatsu-Ya",
+    priceLevel: 2,
+    activityType: "dinner",
+    address: "8557 Research Blvd, Austin, TX",
+    imageUrl: null,
+    source: "text",
+    sourceBy: 1,
+  },
+  {
+    id: 2,
+    groupId: 1,
+    name: "Bouldin Creek Café",
+    priceLevel: 2,
+    activityType: "dinner",
+    address: "1900 S 1st St, Austin, TX",
+    imageUrl: null,
+    source: "text",
+    sourceBy: 2,
+  },
+  {
+    id: 3,
+    groupId: 1,
+    name: "Barton Springs Pool",
+    priceLevel: 1,
+    activityType: "outdoors",
+    address: "2131 William Barton Dr, Austin, TX",
+    imageUrl: null,
+    source: "screenshot",
+    sourceBy: 3,
+  },
+  {
+    id: 4,
+    groupId: 1,
+    name: "Odd Duck",
+    priceLevel: 3,
+    activityType: "dinner",
+    address: "1201 S Lamar Blvd, Austin, TX",
+    imageUrl: null,
+    source: "text",
+    sourceBy: 5,
+  },
+  {
+    id: 5,
+    groupId: 1,
+    name: "Mozart’s Coffee Roasters",
+    priceLevel: 2,
+    activityType: "coffee",
+    address: "3825 Lake Austin Blvd, Austin, TX",
+    imageUrl: null,
+    source: "screenshot",
+    sourceBy: 4,
+  },
+  {
+    id: 6,
+    groupId: 1,
+    name: "Continental Club",
+    priceLevel: 2,
+    activityType: "music",
+    address: "1315 S Congress Ave, Austin, TX",
+    imageUrl: null,
+    source: "pixie",
+    sourceBy: null,
+  },
+  {
+    id: 7,
+    groupId: 2,
+    name: "Mozart’s Coffee Roasters",
+    priceLevel: 2,
+    activityType: "coffee",
+    address: "3825 Lake Austin Blvd, Austin, TX",
+    imageUrl: null,
+    source: "screenshot",
+    sourceBy: 4,
+  },
+  {
+    id: 8,
+    groupId: 3,
+    name: "Austin Bouldering Project",
+    priceLevel: 2,
+    activityType: "outdoors",
+    address: "979 Springdale Rd, Austin, TX",
+    imageUrl: null,
+    source: "text",
+    sourceBy: 6,
+  },
 ];
 
 // ---------- Confirmed plans (home + profile) ----------
@@ -117,7 +225,7 @@ const friend = (
   id: number,
   daysSince: number,
   outings: [string, string, number][],
-  sharedGroupId: number | null
+  sharedGroupId: number | null,
 ): VillageFriend => {
   const person = PEOPLE[id];
   return {
@@ -127,16 +235,53 @@ const friend = (
     tint: person.tint,
     daysSince,
     hangoutCount: outings.length,
-    outings: outings.map(([name, type, daysAgo], i) => ({ id: id * 10 + i, name, type, daysAgo })),
+    outings: outings.map(([name, type, daysAgo], i) => ({
+      id: id * 10 + i,
+      name,
+      type,
+      daysAgo,
+    })),
     sharedGroupId,
   };
 };
 
 export const VILLAGE_FRIENDS: VillageFriend[] = [
-  friend(2, 3, [["Coffee + games", "Games", 3], ["Ramen night", "Dinner", 365]], 1),
-  friend(4, 3, [["Coffee + games", "Games", 3], ["Ramen night", "Dinner", 365]], 2),
-  friend(3, 35, [["Sunset swim", "Outdoors", 35], ["Ramen night", "Dinner", 365]], 1),
-  friend(5, 10, [["Dinner at Odd Duck", "Dinner", 10], ["Ramen night", "Dinner", 365]], 1),
+  friend(
+    2,
+    3,
+    [
+      ["Coffee + games", "Games", 3],
+      ["Ramen night", "Dinner", 365],
+    ],
+    1,
+  ),
+  friend(
+    4,
+    3,
+    [
+      ["Coffee + games", "Games", 3],
+      ["Ramen night", "Dinner", 365],
+    ],
+    2,
+  ),
+  friend(
+    3,
+    35,
+    [
+      ["Sunset swim", "Outdoors", 35],
+      ["Ramen night", "Dinner", 365],
+    ],
+    1,
+  ),
+  friend(
+    5,
+    10,
+    [
+      ["Dinner at Odd Duck", "Dinner", 10],
+      ["Ramen night", "Dinner", 365],
+    ],
+    1,
+  ),
   friend(7, 6, [["Taco night", "Dinner", 6]], 3),
   friend(8, 28, [["Karaoke", "Music", 28]], 3),
   friend(9, 49, [["Brunch", "Brunch", 49]], null),
@@ -178,4 +323,5 @@ export const CONTACTS: Contact[] = [
 ];
 
 export const groupById = (id: number) => GROUPS.find((g) => g.id === id);
-export const ideasForGroup = (groupId: number) => IDEAS.filter((i) => i.groupId === groupId);
+export const ideasForGroup = (groupId: number) =>
+  IDEAS.filter((i) => i.groupId === groupId);

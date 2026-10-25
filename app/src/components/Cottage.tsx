@@ -6,10 +6,22 @@ import type { CottageState } from "@/lib/config";
 //   thriving  : fresh paint, glowing windows, flowers  (hung out in the last 14 days)
 //   weathered : faded, vines creeping in               (15 to 56 days)
 //   run-down  : cracked, boarded up, dead tree         (over 56 days)
-export function Cottage({ state, width = "100%" }: { state: CottageState; width?: number | `${number}%` }) {
+export function Cottage({
+  state,
+  width = "100%",
+}: {
+  state: CottageState;
+  width?: number | `${number}%`;
+}) {
   return (
     <View style={{ width, aspectRatio: 84 / 96 }}>
-      <Svg width="100%" height="100%" viewBox="0 0 84 96" accessibilityElementsHidden importantForAccessibility="no">
+      <Svg
+        width="100%"
+        height="100%"
+        viewBox="0 0 84 96"
+        accessibilityElementsHidden
+        importantForAccessibility="no"
+      >
         {state === "thriving" && <Thriving />}
         {state === "weathered" && <Weathered />}
         {state === "run-down" && <RunDown />}
@@ -43,7 +55,12 @@ function Thriving() {
 }
 
 function Weathered() {
-  const vine = { stroke: "#2F7A4F", strokeWidth: 2.6, fill: "none" as const, strokeLinecap: "round" as const };
+  const vine = {
+    stroke: "#2F7A4F",
+    strokeWidth: 2.6,
+    fill: "none" as const,
+    strokeLinecap: "round" as const,
+  };
   return (
     <>
       <Rect x={0} y={84} width={84} height={12} fill="#6F9F7D" />
@@ -64,7 +81,12 @@ function Weathered() {
         <Circle cx={62} cy={58} r={3} />
         <Circle cx={31} cy={49} r={2.6} />
       </G>
-      <Path d="M4 84 L6 78 L8 84 M74 84 L76 77 L79 84" stroke="#3E8E63" strokeWidth={2} fill="none" />
+      <Path
+        d="M4 84 L6 78 L8 84 M74 84 L76 77 L79 84"
+        stroke="#3E8E63"
+        strokeWidth={2}
+        fill="none"
+      />
     </>
   );
 }
@@ -77,24 +99,64 @@ function RunDown() {
       <Rect x={16} y={52} width={52} height={32} fill="#B5AB9C" />
       <Path d="M9 56 L28 36 L40 44 L56 30 L75 56Z" fill="#5C5870" />
       <Path d="M44 38 L53 37 L50 46Z" fill="#2B2347" />
-      <Path d="M30 52 L34 62 L30 70 L35 84" stroke="#6B6254" strokeWidth={1.6} fill="none" />
+      <Path
+        d="M30 52 L34 62 L30 70 L35 84"
+        stroke="#6B6254"
+        strokeWidth={1.6}
+        fill="none"
+      />
       <Rect x={20} y={58} width={11} height={11} fill="#3A3350" />
-      <Path d="M19 61 L32 66 M19 67 L32 62" stroke="#8E7A55" strokeWidth={2.4} />
+      <Path
+        d="M19 61 L32 66 M19 67 L32 62"
+        stroke="#8E7A55"
+        strokeWidth={2.4}
+      />
       <Path d="M53 58 L64 58 L64 62 L60 64 L64 69 L53 69Z" fill="#3A3350" />
       <Path d="M36 84 L36 68 L46 63 L49 84Z" fill="#6B5A3E" />
-      <Path d="M70 84 L68 70 L72 62 M68 74 L63 70 M70 68 L75 64" stroke="#5A4A35" strokeWidth={1.8} fill="none" strokeLinecap="round" />
-      <Path d="M6 84 L8 76 M10 84 L9 78 M14 84 L17 77 M76 84 L74 78" stroke="#7A7440" strokeWidth={1.6} fill="none" />
+      <Path
+        d="M70 84 L68 70 L72 62 M68 74 L63 70 M70 68 L75 64"
+        stroke="#5A4A35"
+        strokeWidth={1.8}
+        fill="none"
+        strokeLinecap="round"
+      />
+      <Path
+        d="M6 84 L8 76 M10 84 L9 78 M14 84 L17 77 M76 84 L74 78"
+        stroke="#7A7440"
+        strokeWidth={1.6}
+        fill="none"
+      />
     </>
   );
 }
 
 // An empty plot: a dashed outline and a flag, with an invite waiting inside.
-export function OpenPlot({ width = "100%" }: { width?: number | `${number}%` }) {
+export function OpenPlot({
+  width = "100%",
+}: {
+  width?: number | `${number}%`;
+}) {
   return (
     <View style={{ width, aspectRatio: 84 / 96 }}>
-      <Svg width="100%" height="100%" viewBox="0 0 84 96" accessibilityElementsHidden importantForAccessibility="no">
+      <Svg
+        width="100%"
+        height="100%"
+        viewBox="0 0 84 96"
+        accessibilityElementsHidden
+        importantForAccessibility="no"
+      >
         <Rect x={0} y={84} width={84} height={12} fill="#7FBF98" />
-        <Rect x={22} y={74} width={40} height={10} rx={3} fill="none" stroke="#6B47C4" strokeWidth={1.5} strokeDasharray="4 3" />
+        <Rect
+          x={22}
+          y={74}
+          width={40}
+          height={10}
+          rx={3}
+          fill="none"
+          stroke="#6B47C4"
+          strokeWidth={1.5}
+          strokeDasharray="4 3"
+        />
         <Path d="M42 70 V54" stroke="#8A6B3F" strokeWidth={2.4} />
         <Path d="M42 54 L60 59 L42 64Z" fill="#E3B04B" />
       </Svg>
@@ -103,10 +165,20 @@ export function OpenPlot({ width = "100%" }: { width?: number | `${number}%` }) 
 }
 
 // Locked plots are drawn as pale ghosts.
-export function GhostCottage({ width = "100%" }: { width?: number | `${number}%` }) {
+export function GhostCottage({
+  width = "100%",
+}: {
+  width?: number | `${number}%`;
+}) {
   return (
     <View style={{ width, aspectRatio: 84 / 96 }}>
-      <Svg width="100%" height="100%" viewBox="0 0 84 96" accessibilityElementsHidden importantForAccessibility="no">
+      <Svg
+        width="100%"
+        height="100%"
+        viewBox="0 0 84 96"
+        accessibilityElementsHidden
+        importantForAccessibility="no"
+      >
         <Rect x={0} y={84} width={84} height={12} fill="#CFC6E6" />
         <Rect x={16} y={50} width={52} height={34} fill="#D9D1EC" />
         <Path d="M9 52 L42 23 L75 52Z" fill="#C2B7E0" />

@@ -43,7 +43,11 @@ export function parsePriceLevel(p: any): number | null {
   return null;
 }
 
-const tokens = (s: string) => s.toLowerCase().match(/[a-z0-9]+/g)?.filter((t) => t.length > 2) ?? [];
+const tokens = (s: string) =>
+  s
+    .toLowerCase()
+    .match(/[a-z0-9]+/g)
+    ?.filter((t) => t.length > 2) ?? [];
 
 // Guard against SerpApi returning an unrelated place for a vague query.
 export function similarNames(a: string, b: string): boolean {
@@ -51,7 +55,10 @@ export function similarNames(a: string, b: string): boolean {
   return tokens(a).some((t) => tb.has(t));
 }
 
-export async function lookupPlace(name: string, location?: string | null): Promise<Place | null> {
+export async function lookupPlace(
+  name: string,
+  location?: string | null,
+): Promise<Place | null> {
   const key = process.env.SERPAPI_KEY;
   if (!key) throw new Error("SERPAPI_KEY not set");
   const ll = process.env.SERPAPI_LL ?? DEFAULT_LL;
@@ -64,10 +71,14 @@ export async function lookupPlace(name: string, location?: string | null): Promi
   };
   if (ll !== "none") params.ll = ll;
 
-  const r = await fetch(`https://serpapi.com/search.json?${new URLSearchParams(params)}`, {
-    signal: AbortSignal.timeout(20_000),
-  });
-  if (!r.ok) throw new Error(`serpapi ${r.status}: ${(await r.text()).slice(0, 200)}`);
+  const r = await fetch(
+    `https://serpapi.com/search.json?${new URLSearchParams(params)}`,
+    {
+      signal: AbortSignal.timeout(20_000),
+    },
+  );
+  if (!r.ok)
+    throw new Error(`serpapi ${r.status}: ${(await r.text()).slice(0, 200)}`);
   const j = await r.json();
 
   const p = j.place_results ?? j.local_results?.[0];
@@ -76,7 +87,11 @@ export async function lookupPlace(name: string, location?: string | null): Promi
   return {
     name: p.title,
     address: p.address ?? null,
-    image_url: p.thumbnail ?? p.photos?.[0]?.thumbnail ?? p.images?.[0]?.thumbnail ?? null,
+    image_url:
+      p.thumbnail ??
+      p.photos?.[0]?.thumbnail ??
+      p.images?.[0]?.thumbnail ??
+      null,
     price_level: parsePriceLevel(p),
     rating: typeof p.rating === "number" ? p.rating : null,
   };

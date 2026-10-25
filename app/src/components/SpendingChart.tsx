@@ -12,10 +12,20 @@ export function SpendingChart({ months }: { months: Month[] }) {
   const top = Math.ceil(max / 30) * 30; // headroom so the tallest bar never touches the top
   const slot = W / months.length;
   const barW = Math.min(38, slot - 12);
-  const summary = months.map((m, i) => `${m.label} $${m.amount}${i === months.length - 1 ? " so far" : ""}`).join(", ");
+  const summary = months
+    .map(
+      (m, i) =>
+        `${m.label} $${m.amount}${i === months.length - 1 ? " so far" : ""}`,
+    )
+    .join(", ");
 
   return (
-    <Svg width="100%" viewBox="0 0 340 170" style={{ aspectRatio: 340 / 170 }} accessibilityLabel={`Bar chart of monthly spending on outings: ${summary}`}>
+    <Svg
+      width="100%"
+      viewBox="0 0 340 170"
+      style={{ aspectRatio: 340 / 170 }}
+      accessibilityLabel={`Bar chart of monthly spending on outings: ${summary}`}
+    >
       <G stroke={colors.lineSoft} strokeWidth={1}>
         <Path d="M0 30H340" />
         <Path d="M0 70H340" />
@@ -28,11 +38,32 @@ export function SpendingChart({ months }: { months: Month[] }) {
         const current = i === months.length - 1;
         return (
           <G key={m.label}>
-            <Rect x={x} y={base - h} width={barW} height={h} rx={8} fill={current ? colors.gold : colors.lavender} />
-            <SvgText x={cx} y={base - h - 6} fontSize={12} fontWeight="800" fill={colors.ink} textAnchor="middle">
+            <Rect
+              x={x}
+              y={base - h}
+              width={barW}
+              height={h}
+              rx={8}
+              fill={current ? colors.gold : colors.lavender}
+            />
+            <SvgText
+              x={cx}
+              y={base - h - 6}
+              fontSize={12}
+              fontWeight="800"
+              fill={colors.ink}
+              textAnchor="middle"
+            >
               {`$${m.amount}`}
             </SvgText>
-            <SvgText x={cx} y={160} fontSize={12} fontWeight="700" fill={colors.muted} textAnchor="middle">
+            <SvgText
+              x={cx}
+              y={160}
+              fontSize={12}
+              fontWeight="700"
+              fill={colors.muted}
+              textAnchor="middle"
+            >
               {m.label}
             </SvgText>
           </G>

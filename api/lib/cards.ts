@@ -39,38 +39,63 @@ export async function listCards(groupId?: number): Promise<Card[]> {
     `${SELECT}
      WHERE ($1::int IS NULL OR EXISTS (SELECT 1 FROM card_shares s WHERE s.card_id = c.id AND s.group_id = $1))
      ORDER BY c.created_at DESC, c.id DESC LIMIT 100`,
-    [groupId ?? null]
+    [groupId ?? null],
   );
   return rows.map(mapRow);
 }
 
-export async function insertCard(d: CardDraft, userId: number): Promise<number> {
+export async function insertCard(
+  d: CardDraft,
+  userId: number,
+): Promise<number> {
   const rows = await query<{ id: number }>(
     `INSERT INTO cards (created_by, name, activity_type, address, image_url, price_level, rating, dietary_tags, source, source_text, needs_review)
      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING id`,
-    [userId, d.name, d.activity_type, d.address, d.image_url, d.price_level, d.rating, d.dietary_tags, d.source, d.source_text, d.needs_review]
+    [
+      userId,
+      d.name,
+      d.activity_type,
+      d.address,
+      d.image_url,
+      d.price_level,
+      d.rating,
+      d.dietary_tags,
+      d.source,
+      d.source_text,
+      d.needs_review,
+    ],
   );
   return rows[0].id;
 }
 
-export async function shareCard(cardId: number, groupIds: number[], userIds: number[] = []) {
+export async function shareCard(
+  cardId: number,
+  groupIds: number[],
+  userIds: number[] = [],
+) {
   for (const gid of groupIds) {
     await query(
       `INSERT INTO card_shares (card_id, group_id) SELECT $1, $2
        WHERE NOT EXISTS (SELECT 1 FROM card_shares WHERE card_id = $1 AND group_id = $2)`,
-      [cardId, gid]
+      [cardId, gid],
     );
   }
   for (const uid of userIds) {
     await query(
       `INSERT INTO card_shares (card_id, user_id) SELECT $1, $2
        WHERE NOT EXISTS (SELECT 1 FROM card_shares WHERE card_id = $1 AND user_id = $2)`,
-      [cardId, uid]
+      [cardId, uid],
     );
   }
 }
 
-const EDITABLE = ["name", "activity_type", "address", "image_url", "price_level"] as const;
+const EDITABLE = [
+  "name",
+  "activity_type",
+  "address",
+  "image_url",
+  "price_level",
+] as const;
 
 export async function updateCard(id: number, patch: Record<string, unknown>) {
   const sets: string[] = [];
@@ -83,5 +108,8 @@ export async function updateCard(id: number, patch: Record<string, unknown>) {
   }
   if (!sets.length) return;
   vals.push(id);
-  await query(`UPDATE cards SET ${sets.join(", ")}, needs_review = FALSE WHERE id = $${vals.length}`, vals);
+  await query(
+    `UPDATE cards SET ${sets.join(", ")}, needs_review = FALSE WHERE id = $${vals.length}`,
+    vals,
+  );
 }

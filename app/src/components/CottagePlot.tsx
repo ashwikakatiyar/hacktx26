@@ -25,7 +25,13 @@ export function CottagePlot({
       accessibilityLabel={`${friend.name}, ${COTTAGE_LABEL[state]} cottage. Show hangouts`}
       style={styles.cell}
     >
-      <Avatar person={friend} size={48} border={selected ? 4 : 2} borderColor={selected ? colors.gold : "#FFFFFF"} style={styles.photo} />
+      <Avatar
+        person={friend}
+        size={48}
+        border={selected ? 4 : 2}
+        borderColor={selected ? colors.gold : "#FFFFFF"}
+        style={styles.photo}
+      />
       <Cottage state={state} />
       <Text style={styles.name} numberOfLines={1}>
         {friend.name}
@@ -37,7 +43,12 @@ export function CottagePlot({
 
 export function OpenPlotCell({ onPress }: { onPress: () => void }) {
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel="Open plot. Invite a friend" style={styles.cell}>
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel="Open plot. Invite a friend"
+      style={styles.cell}
+    >
       <View style={styles.dashed}>
         <Text style={styles.plus}>+</Text>
       </View>
@@ -64,5 +75,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 2,
   },
-  plus: { fontSize: 22, fontWeight: "800", color: colors.accent, marginTop: -2 },
+  plus: {
+    fontSize: 22,
+    fontWeight: "800",
+    color: colors.accent,
+    marginTop: -2,
+  },
 });

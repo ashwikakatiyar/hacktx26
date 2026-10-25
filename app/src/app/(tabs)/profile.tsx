@@ -8,7 +8,15 @@ import { NightHeader } from "@/components/NightHeader";
 import { SpendingChart } from "@/components/SpendingChart";
 import { plural } from "@/lib/dates";
 import { colors, fonts } from "@/lib/theme";
-import { EVENTS, GROUPS, ME, OWES, PEOPLE, SPENDING, VILLAGE_FRIENDS } from "@/mock/data";
+import {
+  EVENTS,
+  GROUPS,
+  ME,
+  OWES,
+  PEOPLE,
+  SPENDING,
+  VILLAGE_FRIENDS,
+} from "@/mock/data";
 
 const money = (n: number) => `$${n.toFixed(2)}`;
 
@@ -20,20 +28,39 @@ export default function Profile() {
   const owes = OWES.filter((o) => !paid.has(o.id));
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={styles.screen}
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
+    >
       <NightHeader>
         <View style={styles.headRow}>
-          <Avatar person={ME} size={76} border={3} borderColor={colors.goldSoft} />
+          <Avatar
+            person={ME}
+            size={76}
+            border={3}
+            borderColor={colors.goldSoft}
+          />
           <View style={styles.headBody}>
             <Text style={styles.h1}>{ME.name}</Text>
             <Text style={styles.headSub}>
-              {plural(GROUPS.length, "circle")} · {plural(VILLAGE_FRIENDS.length, "friend")}
+              {plural(GROUPS.length, "circle")} ·{" "}
+              {plural(VILLAGE_FRIENDS.length, "friend")}
             </Text>
-            <Pressable onPress={() => router.navigate("/village")} accessibilityRole="link" style={styles.visit}>
+            <Pressable
+              onPress={() => router.navigate("/village")}
+              accessibilityRole="link"
+              style={styles.visit}
+            >
               <Text style={styles.visitText}>Visit your village</Text>
             </Pressable>
           </View>
-          <Pressable onPress={() => router.push("/onboarding")} accessibilityRole="button" accessibilityLabel="Edit your preferences" style={styles.gear}>
+          <Pressable
+            onPress={() => router.push("/onboarding")}
+            accessibilityRole="button"
+            accessibilityLabel="Edit your preferences"
+            style={styles.gear}
+          >
             <Icon name="gear" size={22} color={colors.goldSoft} />
           </Pressable>
         </View>
@@ -55,7 +82,8 @@ export default function Profile() {
             <Text style={styles.muted}>{SPENDING.periodLabel}</Text>
           </View>
           <Text style={styles.thisMonth}>
-            This month so far: <Text style={styles.thisMonthAmt}>${thisMonth.amount}</Text>
+            This month so far:{" "}
+            <Text style={styles.thisMonthAmt}>${thisMonth.amount}</Text>
           </Text>
           <SpendingChart months={SPENDING.months} />
         </View>
@@ -64,12 +92,17 @@ export default function Profile() {
           <Text style={styles.h2}>What you owe</Text>
           <View style={styles.oweCard}>
             {owes.length === 0 ? (
-              <Text style={styles.allSquare}>You’re all square. Nothing owed right now.</Text>
+              <Text style={styles.allSquare}>
+                You’re all square. Nothing owed right now.
+              </Text>
             ) : (
               owes.map((o, i) => {
                 const person = PEOPLE[o.personId];
                 return (
-                  <View key={o.id} style={[styles.oweRow, i > 0 && styles.rule]}>
+                  <View
+                    key={o.id}
+                    style={[styles.oweRow, i > 0 && styles.rule]}
+                  >
                     <Avatar person={person} size={44} />
                     <View style={styles.oweBody}>
                       <Text style={styles.oweName}>{person.name}</Text>
@@ -100,33 +133,122 @@ export default function Profile() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   content: { paddingBottom: 28 },
-  headRow: { flexDirection: "row", alignItems: "center", gap: 16, paddingTop: 8 },
+  headRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+    paddingTop: 8,
+  },
   headBody: { flex: 1 },
-  h1: { fontFamily: fonts.display, fontSize: 34, lineHeight: 36, fontWeight: "700", color: "#fff" },
-  headSub: { fontSize: 14, fontWeight: "600", color: colors.onNight, marginTop: 4 },
+  h1: {
+    fontFamily: fonts.display,
+    fontSize: 34,
+    lineHeight: 36,
+    fontWeight: "700",
+    color: "#fff",
+  },
+  headSub: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: colors.onNight,
+    marginTop: 4,
+  },
   visit: { minHeight: 44, justifyContent: "center", alignSelf: "flex-start" },
-  visitText: { fontSize: 14, fontWeight: "800", color: colors.goldSoft, textDecorationLine: "underline" },
-  gear: { width: 44, height: 44, borderRadius: 22, borderWidth: 1.5, borderColor: colors.gold, alignItems: "center", justifyContent: "center" },
+  visitText: {
+    fontSize: 14,
+    fontWeight: "800",
+    color: colors.goldSoft,
+    textDecorationLine: "underline",
+  },
+  gear: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    borderWidth: 1.5,
+    borderColor: colors.gold,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 
   main: { paddingHorizontal: 20, paddingTop: 18, gap: 20 },
-  h2: { fontFamily: fonts.display, fontSize: 24, fontWeight: "700", color: colors.ink, marginBottom: 10 },
+  h2: {
+    fontFamily: fonts.display,
+    fontSize: 24,
+    fontWeight: "700",
+    color: colors.ink,
+    marginBottom: 10,
+  },
   list: { gap: 12 },
   muted: { fontSize: 13, fontWeight: "700", color: colors.muted },
 
-  card: { backgroundColor: "#fff", borderWidth: 1, borderColor: colors.line, borderRadius: 20, paddingHorizontal: 14, paddingTop: 14, paddingBottom: 10 },
-  cardHead: { flexDirection: "row", alignItems: "baseline", justifyContent: "space-between" },
-  cardTitle: { fontFamily: fonts.display, fontSize: 24, fontWeight: "700", color: colors.ink },
-  thisMonth: { fontSize: 14, fontWeight: "600", color: colors.muted, marginTop: 2, marginBottom: 6 },
+  card: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: colors.line,
+    borderRadius: 20,
+    paddingHorizontal: 14,
+    paddingTop: 14,
+    paddingBottom: 10,
+  },
+  cardHead: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    justifyContent: "space-between",
+  },
+  cardTitle: {
+    fontFamily: fonts.display,
+    fontSize: 24,
+    fontWeight: "700",
+    color: colors.ink,
+  },
+  thisMonth: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: colors.muted,
+    marginTop: 2,
+    marginBottom: 6,
+  },
   thisMonthAmt: { fontSize: 15, fontWeight: "800", color: colors.ink },
 
-  oweCard: { backgroundColor: "#fff", borderWidth: 1, borderColor: colors.line, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 4 },
-  oweRow: { flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 10 },
+  oweCard: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: colors.line,
+    borderRadius: 20,
+    paddingHorizontal: 14,
+    paddingVertical: 4,
+  },
+  oweRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    paddingVertical: 10,
+  },
   rule: { borderTopWidth: 1, borderTopColor: colors.lineSoft },
   oweBody: { flex: 1, minWidth: 0 },
   oweName: { fontSize: 15, fontWeight: "800", color: colors.ink },
   oweWhy: { fontSize: 13, fontWeight: "600", color: colors.muted },
-  oweAmt: { fontFamily: fonts.display, fontSize: 22, fontWeight: "700", color: colors.ink },
-  pay: { minHeight: 44, paddingHorizontal: 14, borderRadius: 12, borderWidth: 1.5, borderColor: colors.accent, backgroundColor: "#fff", alignItems: "center", justifyContent: "center" },
+  oweAmt: {
+    fontFamily: fonts.display,
+    fontSize: 22,
+    fontWeight: "700",
+    color: colors.ink,
+  },
+  pay: {
+    minHeight: 44,
+    paddingHorizontal: 14,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: colors.accent,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   payText: { fontSize: 13, fontWeight: "800", color: colors.accent },
-  allSquare: { fontSize: 14, fontWeight: "600", color: colors.muted, paddingVertical: 14 },
+  allSquare: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: colors.muted,
+    paddingVertical: 14,
+  },
 });

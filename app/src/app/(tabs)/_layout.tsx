@@ -4,7 +4,8 @@ import { FLAGS } from "@/lib/config";
 import { session } from "@/mock/session";
 
 export default function TabsLayout() {
-  if (FLAGS.showOnboardingOnLaunch && !session.onboarded) return <Redirect href="/onboarding" />;
+  if (FLAGS.showOnboardingOnLaunch && !session.onboarded)
+    return <Redirect href="/onboarding" />;
   return (
     <Tabs tabBar={() => <AppTabBar />} screenOptions={{ headerShown: false }}>
       <Tabs.Screen name="index" options={{ title: "Home" }} />

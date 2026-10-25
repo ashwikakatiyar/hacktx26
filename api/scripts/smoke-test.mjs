@@ -11,7 +11,12 @@ async function check(name, fn) {
   } catch (e) {
     // Node's fetch hides the real reason in e.cause (DNS, TLS, refused, etc.)
     const why = e.cause ? ` (${e.cause.code || e.cause.message})` : "";
-    results.push([name, "FAIL", `${Date.now() - t}ms`, (String(e.message || e) + why).replace(/\s+/g, " ").slice(0, 220)]);
+    results.push([
+      name,
+      "FAIL",
+      `${Date.now() - t}ms`,
+      (String(e.message || e) + why).replace(/\s+/g, " ").slice(0, 220),
+    ]);
   }
 }
 
@@ -27,8 +32,10 @@ await check("Gemini", async () => {
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ contents: [{ parts: [{ text: 'Reply with the single word "pong".' }] }] }),
-    }
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: 'Reply with the single word "pong".' }] }],
+      }),
+    },
   );
   if (!r.ok) throw new Error(`${model}: ${r.status} ${await r.text()}`);
   const j = await r.json();
@@ -52,7 +59,10 @@ await check("SerpApi", async () => {
 });
 
 await check("Nessie", async () => {
-  const base = (env.NESSIE_BASE_URL || "http://api.nessieisreal.com").replace(/\/$/, "");
+  const base = (env.NESSIE_BASE_URL || "http://api.nessieisreal.com").replace(
+    /\/$/,
+    "",
+  );
   const r = await fetch(`${base}/customers?key=${need("NESSIE_API_KEY")}`);
   if (!r.ok) throw new Error(`${base}: ${r.status} ${await r.text()}`);
   const j = await r.json();
@@ -61,15 +71,23 @@ await check("Nessie", async () => {
 
 await check("Muse Spark", async () => {
   // OpenAI-compatible Model API. Key can be MUSE_API_KEY or MODEL_API_KEY.
-  const base = (env.MUSE_BASE_URL || "https://api.meta.ai/v1").replace(/\/$/, "");
+  const base = (env.MUSE_BASE_URL || "https://api.meta.ai/v1").replace(
+    /\/$/,
+    "",
+  );
   const key = env.MUSE_API_KEY || need("MODEL_API_KEY");
   const model = env.MUSE_MODEL || "muse-spark-1.3";
   const r = await fetch(`${base}/chat/completions`, {
     method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${key}`,
+    },
     body: JSON.stringify({
       model,
-      messages: [{ role: "user", content: 'Reply with the single word "pong".' }],
+      messages: [
+        { role: "user", content: 'Reply with the single word "pong".' },
+      ],
     }),
   });
   if (!r.ok) throw new Error(`${model}: ${r.status} ${await r.text()}`);
@@ -78,5 +96,6 @@ await check("Muse Spark", async () => {
 });
 
 console.log("\nAPI smoke test");
-for (const [n, s, t, d] of results) console.log(`${s}  ${n.padEnd(11)} ${t.padEnd(8)} ${d}`);
+for (const [n, s, t, d] of results)
+  console.log(`${s}  ${n.padEnd(11)} ${t.padEnd(8)} ${d}`);
 process.exit(results.some((r) => r[1] === "FAIL") ? 1 : 0);

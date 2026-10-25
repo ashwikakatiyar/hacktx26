@@ -11,7 +11,10 @@ const DIR = path.join(process.cwd(), "cache");
 
 export type CachedResult = { extraction: Extraction; place: Place | null };
 
-export function cacheKey(input: { text?: string; imageBase64?: string }): string {
+export function cacheKey(input: {
+  text?: string;
+  imageBase64?: string;
+}): string {
   const raw = input.imageBase64
     ? "img:" + input.imageBase64.replace(/^data:[^,]+,/, "")
     : "txt:" + (input.text ?? "").trim().toLowerCase().replace(/\s+/g, " ");
@@ -23,11 +26,14 @@ export const forceCache = () => process.env.USE_CACHE === "1";
 export function readCache(key: string): CachedResult | null {
   try {
     const file = path.join(DIR, `${key}.json`);
-    if (fs.existsSync(file)) return JSON.parse(fs.readFileSync(file, "utf8")) as CachedResult;
+    if (fs.existsSync(file))
+      return JSON.parse(fs.readFileSync(file, "utf8")) as CachedResult;
     // Hand-written demo seeds, matched by normalized text.
     const seedFile = path.join(DIR, "demo-seeds.json");
     if (fs.existsSync(seedFile)) {
-      const seeds = JSON.parse(fs.readFileSync(seedFile, "utf8")) as Array<{ text: string } & CachedResult>;
+      const seeds = JSON.parse(fs.readFileSync(seedFile, "utf8")) as Array<
+        { text: string } & CachedResult
+      >;
       const hit = seeds.find((s) => cacheKey({ text: s.text }) === key);
       if (hit) return { extraction: hit.extraction, place: hit.place };
     }
@@ -40,7 +46,10 @@ export function readCache(key: string): CachedResult | null {
 export function writeCache(key: string, value: CachedResult) {
   try {
     fs.mkdirSync(DIR, { recursive: true });
-    fs.writeFileSync(path.join(DIR, `${key}.json`), JSON.stringify(value, null, 2));
+    fs.writeFileSync(
+      path.join(DIR, `${key}.json`),
+      JSON.stringify(value, null, 2),
+    );
   } catch (e) {
     console.warn("cache write failed", e);
   }

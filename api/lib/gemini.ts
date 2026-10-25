@@ -1,5 +1,15 @@
 // Gemini: turn pasted text or a screenshot into structured JSON.
-export const ACTIVITY_TYPES = ["dinner", "brunch", "coffee", "drinks", "outdoors", "music", "games", "art", "other"] as const;
+export const ACTIVITY_TYPES = [
+  "dinner",
+  "brunch",
+  "coffee",
+  "drinks",
+  "outdoors",
+  "music",
+  "games",
+  "art",
+  "other",
+] as const;
 
 export type Extraction = {
   name: string;
@@ -31,7 +41,10 @@ export async function extractFromInput(input: {
   if (input.imageBase64) {
     const m = input.imageBase64.match(/^data:([^;]+);base64,(.*)$/s);
     parts.push({
-      inline_data: { mime_type: m?.[1] ?? input.mimeType ?? "image/jpeg", data: m ? m[2] : input.imageBase64 },
+      inline_data: {
+        mime_type: m?.[1] ?? input.mimeType ?? "image/jpeg",
+        data: m ? m[2] : input.imageBase64,
+      },
     });
   }
 
@@ -42,19 +55,28 @@ export async function extractFromInput(input: {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents: [{ parts }],
-        generationConfig: { responseMimeType: "application/json", temperature: 0 },
+        generationConfig: {
+          responseMimeType: "application/json",
+          temperature: 0,
+        },
       }),
       signal: AbortSignal.timeout(25_000),
-    }
+    },
   );
-  if (!r.ok) throw new Error(`gemini ${r.status}: ${(await r.text()).slice(0, 200)}`);
+  if (!r.ok)
+    throw new Error(`gemini ${r.status}: ${(await r.text()).slice(0, 200)}`);
   const j = await r.json();
-  const raw: string = j.candidates?.[0]?.content?.parts?.map((p: any) => p.text ?? "").join("") ?? "";
+  const raw: string =
+    j.candidates?.[0]?.content?.parts?.map((p: any) => p.text ?? "").join("") ??
+    "";
   return normalizeExtraction(raw);
 }
 
 export function normalizeExtraction(raw: string): Extraction {
-  const cleaned = raw.replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
+  const cleaned = raw
+    .replace(/^```(?:json)?/i, "")
+    .replace(/```$/, "")
+    .trim();
   let o: any;
   try {
     o = JSON.parse(cleaned);
@@ -65,10 +87,16 @@ export function normalizeExtraction(raw: string): Extraction {
   const type = String(o.activity_type ?? "other").toLowerCase();
   return {
     name: String(o.name ?? "").trim(),
-    activity_type: (ACTIVITY_TYPES as readonly string[]).includes(type) ? type : "other",
+    activity_type: (ACTIVITY_TYPES as readonly string[]).includes(type)
+      ? type
+      : "other",
     location: o.location ? String(o.location).trim() : null,
     dietary_tags: Array.isArray(o.dietary_tags)
-      ? o.dietary_tags.map((t: any) => String(t).toLowerCase()).filter((t: string) => ["vegetarian", "vegan", "gluten-free"].includes(t))
+      ? o.dietary_tags
+          .map((t: any) => String(t).toLowerCase())
+          .filter((t: string) =>
+            ["vegetarian", "vegan", "gluten-free"].includes(t),
+          )
       : [],
   };
 }

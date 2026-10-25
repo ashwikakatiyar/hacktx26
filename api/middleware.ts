@@ -7,7 +7,8 @@ export function middleware(req: NextRequest) {
     "Access-Control-Allow-Methods": "GET,POST,PATCH,OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type,x-user-id",
   };
-  if (req.method === "OPTIONS") return new NextResponse(null, { status: 204, headers });
+  if (req.method === "OPTIONS")
+    return new NextResponse(null, { status: 204, headers });
   const res = NextResponse.next();
   for (const [k, v] of Object.entries(headers)) res.headers.set(k, v);
   return res;

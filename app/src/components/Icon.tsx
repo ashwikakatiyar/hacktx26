@@ -16,10 +16,32 @@ export type IconName =
   | "link";
 
 // Stroke icons drawn on a 24x24 grid, matching the mockup's line weight.
-export function Icon({ name, size = 24, color = "#2B2347", strokeWidth = 2 }: { name: IconName; size?: number; color?: string; strokeWidth?: number }) {
-  const stroke = { stroke: color, strokeWidth, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, fill: "none" };
+export function Icon({
+  name,
+  size = 24,
+  color = "#2B2347",
+  strokeWidth = 2,
+}: {
+  name: IconName;
+  size?: number;
+  color?: string;
+  strokeWidth?: number;
+}) {
+  const stroke = {
+    stroke: color,
+    strokeWidth,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    fill: "none",
+  };
   return (
-    <Svg width={size} height={size} viewBox="0 0 24 24" accessibilityElementsHidden importantForAccessibility="no">
+    <Svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      accessibilityElementsHidden
+      importantForAccessibility="no"
+    >
       {name === "home" && (
         <>
           <Path d="M4 11l8-7 8 7v9H4z" {...stroke} />
@@ -41,8 +63,14 @@ export function Icon({ name, size = 24, color = "#2B2347", strokeWidth = 2 }: { 
       )}
       {name === "sparkle" && (
         <>
-          <Path d="M12 2l2.2 6.3L21 10l-6.8 1.7L12 18l-2.2-6.3L3 10l6.8-1.7z" fill={color} />
-          <Path d="M19 15l.9 2.1 2.1.9-2.1.9L19 21l-.9-2.1-2.1-.9 2.1-.9z" fill={color} />
+          <Path
+            d="M12 2l2.2 6.3L21 10l-6.8 1.7L12 18l-2.2-6.3L3 10l6.8-1.7z"
+            fill={color}
+          />
+          <Path
+            d="M19 15l.9 2.1 2.1.9-2.1.9L19 21l-.9-2.1-2.1-.9 2.1-.9z"
+            fill={color}
+          />
         </>
       )}
       {name === "fairy" && (
@@ -65,7 +93,10 @@ export function Icon({ name, size = 24, color = "#2B2347", strokeWidth = 2 }: { 
       {name === "gear" && (
         <>
           <Circle cx={12} cy={12} r={3} {...stroke} />
-          <Path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" {...stroke} />
+          <Path
+            d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"
+            {...stroke}
+          />
         </>
       )}
       {name === "calendar" && (
@@ -77,8 +108,14 @@ export function Icon({ name, size = 24, color = "#2B2347", strokeWidth = 2 }: { 
       )}
       {name === "link" && (
         <>
-          <Path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1" {...stroke} />
-          <Path d="M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1" {...stroke} />
+          <Path
+            d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1"
+            {...stroke}
+          />
+          <Path
+            d="M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"
+            {...stroke}
+          />
         </>
       )}
     </Svg>

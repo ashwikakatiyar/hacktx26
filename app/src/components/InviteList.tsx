@@ -4,18 +4,34 @@ import { colors } from "@/lib/theme";
 import type { Contact } from "@/mock/data";
 
 // People you can add or invite. Shared by onboarding step 4 and the invite screen (group page, open plots).
-export function InviteList({ contacts, invited, onToggle }: { contacts: Contact[]; invited: Set<number>; onToggle: (personId: number) => void }) {
+export function InviteList({
+  contacts,
+  invited,
+  onToggle,
+}: {
+  contacts: Contact[];
+  invited: Set<number>;
+  onToggle: (personId: number) => void;
+}) {
   return (
     <View style={styles.card}>
       {contacts.map(({ person, onApp }, i) => {
         const on = invited.has(person.id);
-        const label = onApp ? (on ? "Added" : "Add") : on ? "Invited" : "Invite";
+        const label = onApp
+          ? on
+            ? "Added"
+            : "Add"
+          : on
+            ? "Invited"
+            : "Invite";
         return (
           <View key={person.id} style={[styles.row, i > 0 && styles.rule]}>
             <Avatar person={person} size={44} />
             <View style={styles.body}>
               <Text style={styles.name}>{person.name}</Text>
-              <Text style={styles.sub}>{onApp ? "Already on the app" : "In your contacts"}</Text>
+              <Text style={styles.sub}>
+                {onApp ? "Already on the app" : "In your contacts"}
+              </Text>
             </View>
             <Pressable
               onPress={() => onToggle(person.id)}
@@ -24,7 +40,9 @@ export function InviteList({ contacts, invited, onToggle }: { contacts: Contact[
               accessibilityLabel={`${label} ${person.name}`}
               style={[styles.btn, on && styles.btnOn]}
             >
-              <Text style={[styles.btnText, on && styles.btnTextOn]}>{label}</Text>
+              <Text style={[styles.btnText, on && styles.btnTextOn]}>
+                {label}
+              </Text>
             </Pressable>
           </View>
         );
@@ -34,13 +52,35 @@ export function InviteList({ contacts, invited, onToggle }: { contacts: Contact[
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: "#fff", borderWidth: 1, borderColor: colors.line, borderRadius: 20, paddingHorizontal: 14, paddingVertical: 4 },
-  row: { flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 10 },
+  card: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: colors.line,
+    borderRadius: 20,
+    paddingHorizontal: 14,
+    paddingVertical: 4,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    paddingVertical: 10,
+  },
   rule: { borderTopWidth: 1, borderTopColor: colors.lineSoft },
   body: { flex: 1, minWidth: 0 },
   name: { fontSize: 15, fontWeight: "800", color: colors.ink },
   sub: { fontSize: 13, fontWeight: "600", color: colors.muted },
-  btn: { minHeight: 44, minWidth: 88, paddingHorizontal: 14, borderRadius: 12, borderWidth: 1.5, borderColor: colors.accent, backgroundColor: "#fff", alignItems: "center", justifyContent: "center" },
+  btn: {
+    minHeight: 44,
+    minWidth: 88,
+    paddingHorizontal: 14,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: colors.accent,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   btnOn: { backgroundColor: colors.accent },
   btnText: { fontSize: 14, fontWeight: "800", color: colors.accent },
   btnTextOn: { color: "#fff" },

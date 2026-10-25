@@ -33,10 +33,24 @@ export const colors = {
 // Display font for headings. The mockup uses Cormorant Garamond; this falls back to a system serif
 // so no extra packages are needed. To use the real font, load it with expo-font and change it here only.
 export const fonts = {
-  display: Platform.select({ ios: "Georgia", android: "serif", default: "Georgia, 'Times New Roman', serif" }) as string,
+  display: Platform.select({
+    ios: "Georgia",
+    android: "serif",
+    default: "Georgia, 'Times New Roman', serif",
+  }) as string,
 };
 
-export const ACTIVITY_TYPES = ["dinner", "brunch", "coffee", "drinks", "outdoors", "music", "games", "art", "other"] as const;
+export const ACTIVITY_TYPES = [
+  "dinner",
+  "brunch",
+  "coffee",
+  "drinks",
+  "outdoors",
+  "music",
+  "games",
+  "art",
+  "other",
+] as const;
 
 export const ACTIVITY_EMOJI: Record<string, string> = {
   dinner: "🍜",
@@ -63,13 +77,43 @@ export const PLACEHOLDER_TINT: Record<string, string> = {
 };
 
 // Little storybook landscapes that stand in for a place photo until a real image_url exists.
-export type ArtTheme = { sky: string; orb: string; hill1: string; hill2: string };
+export type ArtTheme = {
+  sky: string;
+  orb: string;
+  hill1: string;
+  hill2: string;
+};
 export const ART_THEMES: Record<string, ArtTheme> = {
-  dinner: { sky: "#3B2F66", orb: "#F2D27A", hill1: "#2F6B4F", hill2: "#244F3B" },
-  brunch: { sky: "#E8B7C8", orb: "#FFF3C4", hill1: "#8A6FC4", hill2: "#5B3FA8" },
-  coffee: { sky: "#E8B7C8", orb: "#FFF3C4", hill1: "#8A6FC4", hill2: "#5B3FA8" },
-  drinks: { sky: "#6B47C4", orb: "#F7E7B0", hill1: "#3B2F66", hill2: "#2B2347" },
-  outdoors: { sky: "#B9E0C9", orb: "#FFF3C4", hill1: "#5B3FA8", hill2: "#3B2F66" },
+  dinner: {
+    sky: "#3B2F66",
+    orb: "#F2D27A",
+    hill1: "#2F6B4F",
+    hill2: "#244F3B",
+  },
+  brunch: {
+    sky: "#E8B7C8",
+    orb: "#FFF3C4",
+    hill1: "#8A6FC4",
+    hill2: "#5B3FA8",
+  },
+  coffee: {
+    sky: "#E8B7C8",
+    orb: "#FFF3C4",
+    hill1: "#8A6FC4",
+    hill2: "#5B3FA8",
+  },
+  drinks: {
+    sky: "#6B47C4",
+    orb: "#F7E7B0",
+    hill1: "#3B2F66",
+    hill2: "#2B2347",
+  },
+  outdoors: {
+    sky: "#B9E0C9",
+    orb: "#FFF3C4",
+    hill1: "#5B3FA8",
+    hill2: "#3B2F66",
+  },
   music: { sky: "#6B47C4", orb: "#F7E7B0", hill1: "#3B2F66", hill2: "#2B2347" },
   games: { sky: "#6B47C4", orb: "#F7E7B0", hill1: "#3B2F66", hill2: "#2B2347" },
   art: { sky: "#B9E0C9", orb: "#FFF3C4", hill1: "#5B3FA8", hill2: "#3B2F66" },

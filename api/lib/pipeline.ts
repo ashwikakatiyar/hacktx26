@@ -5,7 +5,11 @@ import { extractFromInput, type Extraction } from "./gemini";
 import { lookupPlace, similarNames, type Place } from "./serpapi";
 import { cacheKey, forceCache, readCache, writeCache } from "./cache";
 
-export type CardInput = { text?: string; imageBase64?: string; mimeType?: string };
+export type CardInput = {
+  text?: string;
+  imageBase64?: string;
+  mimeType?: string;
+};
 
 export type CardDraft = {
   name: string;
@@ -28,10 +32,17 @@ export type PipelineMeta = {
 
 function guessFromText(text?: string): Extraction {
   const first = (text ?? "").split(/\n/)[0]?.trim().slice(0, 60);
-  return { name: first || "New idea (tap to edit)", activity_type: "other", location: null, dietary_tags: [] };
+  return {
+    name: first || "New idea (tap to edit)",
+    activity_type: "other",
+    location: null,
+    dietary_tags: [],
+  };
 }
 
-export async function buildCard(input: CardInput): Promise<{ draft: CardDraft; meta: PipelineMeta }> {
+export async function buildCard(
+  input: CardInput,
+): Promise<{ draft: CardDraft; meta: PipelineMeta }> {
   const t0 = Date.now();
   const meta: PipelineMeta = { ms: { total: 0 }, fallbacks: [], errors: [] };
   const key = cacheKey({ text: input.text, imageBase64: input.imageBase64 });
@@ -73,7 +84,11 @@ export async function buildCard(input: CardInput): Promise<{ draft: CardDraft; m
       }
       meta.ms.serpapi = Date.now() - ts;
 
-      if (!place && cached?.place && similarNames(extraction.name, cached.place.name)) {
+      if (
+        !place &&
+        cached?.place &&
+        similarNames(extraction.name, cached.place.name)
+      ) {
         place = cached.place;
         meta.fallbacks.push("serpapi:cache");
       }

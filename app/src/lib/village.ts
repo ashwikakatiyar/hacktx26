@@ -14,19 +14,41 @@ export type VillageFriend = {
   sharedGroupId: number | null;
 };
 
-export type VillageCell = { kind: "friend"; friend: VillageFriend; state: CottageState } | { kind: "open" };
+export type VillageCell =
+  | { kind: "friend"; friend: VillageFriend; state: CottageState }
+  | { kind: "open" };
 
 export type VillageRow =
-  | { locked: false; index: number; title: string; sub: string; cells: VillageCell[] }
-  | { locked: true; index: number; title: string; sub: string; lockText: string };
+  | {
+      locked: false;
+      index: number;
+      title: string;
+      sub: string;
+      cells: VillageCell[];
+    }
+  | {
+      locked: true;
+      index: number;
+      title: string;
+      sub: string;
+      lockText: string;
+    };
 
-export type Village = { rows: VillageRow[]; summary: string; thrivingCount: number; unlockedRows: number };
+export type Village = {
+  rows: VillageRow[];
+  summary: string;
+  thrivingCount: number;
+  unlockedRows: number;
+};
 
 export function buildVillage(friends: VillageFriend[]): Village {
   const size = VILLAGE.rowSize;
   const need = VILLAGE.thrivingNeededToUnlockNextRow;
   const n = friends.length;
-  const withState = friends.map((friend) => ({ friend, state: cottageState(friend.daysSince) }));
+  const withState = friends.map((friend) => ({
+    friend,
+    state: cottageState(friend.daysSince),
+  }));
   const thrivingCount = withState.filter((f) => f.state === "thriving").length;
 
   // Every friend must be visible, so rows holding friends are always unlocked.
@@ -42,7 +64,13 @@ export function buildVillage(friends: VillageFriend[]): Village {
       cells.push(entry ? { kind: "friend", ...entry } : { kind: "open" });
     }
     const filled = cells.filter((c) => c.kind === "friend").length;
-    rows.push({ locked: false, index: r, title: `Row ${r + 1}`, sub: `${filled} of ${size} plots filled`, cells });
+    rows.push({
+      locked: false,
+      index: r,
+      title: `Row ${r + 1}`,
+      sub: `${filled} of ${size} plots filled`,
+      cells,
+    });
   }
 
   const openPlots = unlockedRows * size - n;
@@ -57,5 +85,10 @@ export function buildVillage(friends: VillageFriend[]): Village {
         : `Keep ${need} cottages Thriving to unlock this row (${thrivingCount} of ${need} right now).`,
   });
 
-  return { rows, summary: `${plural(n, "friend")} · ${plural(unlockedRows, "row")} unlocked`, thrivingCount, unlockedRows };
+  return {
+    rows,
+    summary: `${plural(n, "friend")} · ${plural(unlockedRows, "row")} unlocked`,
+    thrivingCount,
+    unlockedRows,
+  };
 }

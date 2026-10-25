@@ -1,9 +1,19 @@
 import { Image } from "expo-image";
 import { useState } from "react";
-import { StyleSheet, Text, View, type StyleProp, type ViewStyle } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
 import { colors } from "@/lib/theme";
 
-export type AvatarPerson = { name: string; avatarUrl: string | null; tint: string };
+export type AvatarPerson = {
+  name: string;
+  avatarUrl: string | null;
+  tint: string;
+};
 
 // Profile photo, falling back to a tinted initial when there is no photo or it fails to load (offline demo).
 export function Avatar({
@@ -26,14 +36,34 @@ export function Avatar({
       accessibilityLabel={person.name}
       style={[
         styles.base,
-        { width: size, height: size, borderRadius: size / 2, backgroundColor: person.tint, borderWidth: border, borderColor },
+        {
+          width: size,
+          height: size,
+          borderRadius: size / 2,
+          backgroundColor: person.tint,
+          borderWidth: border,
+          borderColor,
+        },
         style,
       ]}
     >
       {showPhoto ? (
-        <Image source={{ uri: person.avatarUrl! }} style={styles.fill} contentFit="cover" onError={() => setFailed(true)} />
+        <Image
+          source={{ uri: person.avatarUrl! }}
+          style={styles.fill}
+          contentFit="cover"
+          onError={() => setFailed(true)}
+        />
       ) : (
-        <Text style={{ fontSize: Math.round(size * 0.38), fontWeight: "800", color: colors.ink }}>{person.name.charAt(0).toUpperCase()}</Text>
+        <Text
+          style={{
+            fontSize: Math.round(size * 0.38),
+            fontWeight: "800",
+            color: colors.ink,
+          }}
+        >
+          {person.name.charAt(0).toUpperCase()}
+        </Text>
       )}
     </View>
   );
@@ -58,16 +88,39 @@ export function AvatarStack({
   return (
     <View style={styles.stack}>
       {shown.map((person, i) => (
-        <Avatar key={`${person.name}-${i}`} person={person} size={size} border={border} borderColor={borderColor} style={i > 0 ? { marginLeft: -size * 0.25 } : undefined} />
+        <Avatar
+          key={`${person.name}-${i}`}
+          person={person}
+          size={size}
+          border={border}
+          borderColor={borderColor}
+          style={i > 0 ? { marginLeft: -size * 0.25 } : undefined}
+        />
       ))}
       {extra > 0 && (
         <View
           style={[
             styles.base,
-            { width: size, height: size, borderRadius: size / 2, marginLeft: -size * 0.25, borderWidth: border, borderColor, backgroundColor: colors.accentSoft },
+            {
+              width: size,
+              height: size,
+              borderRadius: size / 2,
+              marginLeft: -size * 0.25,
+              borderWidth: border,
+              borderColor,
+              backgroundColor: colors.accentSoft,
+            },
           ]}
         >
-          <Text style={{ fontSize: Math.round(size * 0.34), fontWeight: "800", color: colors.ink }}>+{extra}</Text>
+          <Text
+            style={{
+              fontSize: Math.round(size * 0.34),
+              fontWeight: "800",
+              color: colors.ink,
+            }}
+          >
+            +{extra}
+          </Text>
         </View>
       )}
     </View>

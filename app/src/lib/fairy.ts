@@ -4,7 +4,10 @@ import { useSyncExternalStore } from "react";
 export type FairyLook = { wing: string; dress: string; hair: string };
 export type Fairy = { name: string; look: FairyLook };
 
-export const FAIRY_DEFAULT: Fairy = { name: "Pixie", look: { wing: "#BFA8F0", dress: "#F29BB8", hair: "#6B3F2A" } };
+export const FAIRY_DEFAULT: Fairy = {
+  name: "Pixie",
+  look: { wing: "#BFA8F0", dress: "#F29BB8", hair: "#6B3F2A" },
+};
 
 let current: Fairy = FAIRY_DEFAULT;
 const listeners = new Set<() => void>();
@@ -23,7 +26,7 @@ export function useFairy(): Fairy {
       };
     },
     () => current,
-    () => current
+    () => current,
   );
 }
 

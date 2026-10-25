@@ -1,4 +1,34 @@
-import {getCard,shareCard} from "@/lib/cards";
-import {actor,positiveId,ids,member,bad,parse,exists} from "@/lib/phase2";
-export const runtime="nodejs";
-export async function POST(req:Request,{params}:{params:Promise<{id:string}>}) {const me=actor(req),id=positiveId((await params).id),body=await parse(req);if(!me||!id)return bad("invalid request");const groups=body?.group_ids===undefined?[]:ids(body.group_ids),users=body?.user_ids===undefined?[]:ids(body.user_ids);if(!groups||!users||(!groups.length&&!users.length))return bad("valid group_ids or user_ids required");const card=await getCard(id);if(!card)return bad("card not found",404);if(card.created_by!==me)return bad("only card creator can share",403);for(const gid of groups)if(!await member(gid,me))return bad("not a member of target group",403);for(const uid of users)if(!await exists("users",uid))return bad("target user not found",404);await shareCard(id,groups,users);return Response.json({card:await getCard(id)});}
+import { getCard, shareCard } from "@/lib/cards";
+import {
+  actor,
+  positiveId,
+  ids,
+  member,
+  bad,
+  parse,
+  exists,
+} from "@/lib/phase2";
+export const runtime = "nodejs";
+export async function POST(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const me = actor(req),
+    id = positiveId((await params).id),
+    body = await parse(req);
+  if (!me || !id) return bad("invalid request");
+  const groups = body?.group_ids === undefined ? [] : ids(body.group_ids),
+    users = body?.user_ids === undefined ? [] : ids(body.user_ids);
+  if (!groups || !users || (!groups.length && !users.length))
+    return bad("valid group_ids or user_ids required");
+  const card = await getCard(id);
+  if (!card) return bad("card not found", 404);
+  if (card.created_by !== me) return bad("only card creator can share", 403);
+  for (const gid of groups)
+    if (!(await member(gid, me)))
+      return bad("not a member of target group", 403);
+  for (const uid of users)
+    if (!(await exists("users", uid))) return bad("target user not found", 404);
+  await shareCard(id, groups, users);
+  return Response.json({ card: await getCard(id) });
+}

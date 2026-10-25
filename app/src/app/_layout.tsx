@@ -17,11 +17,20 @@ export default function RootLayout() {
       >
         {/* Main app: Home, Village, Profile tabs. Each tab draws its own night-sky header. */}
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="onboarding" options={{ headerShown: false, gestureEnabled: false }} />
+        <Stack.Screen
+          name="onboarding"
+          options={{ headerShown: false, gestureEnabled: false }}
+        />
         <Stack.Screen name="group/[id]" options={{ headerShown: false }} />
-        <Stack.Screen name="invite" options={{ title: "Invite a friend", presentation: "modal" }} />
+        <Stack.Screen
+          name="invite"
+          options={{ title: "Invite a friend", presentation: "modal" }}
+        />
         {/* Phase 1 screens, unchanged apart from the new palette. */}
-        <Stack.Screen name="add" options={{ title: "Add an idea", presentation: "modal" }} />
+        <Stack.Screen
+          name="add"
+          options={{ title: "Add an idea", presentation: "modal" }}
+        />
         <Stack.Screen name="card/[id]" options={{ title: "Edit card" }} />
       </Stack>
     </>
