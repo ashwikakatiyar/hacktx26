@@ -4,6 +4,7 @@ import { Icon } from "@/components/Icon";
 import { PriceTag } from "@/components/CardView";
 import { PlaceArt } from "@/components/PlaceArt";
 import { whenLabel, plural } from "@/lib/dates";
+import { useFairy } from "@/lib/fairy";
 import { colors, fonts } from "@/lib/theme";
 import { PEOPLE, type EventItem, type Group, type Idea } from "@/mock/data";
 
@@ -45,7 +46,7 @@ export function GroupCard({ group, ideaCount, onPress }: { group: Group; ideaCou
       accessibilityLabel={`${group.name}, ${plural(friends, "friend")}, ${plural(ideaCount, "idea")} brewing`}
       style={[styles.row, styles.groupRow]}
     >
-      <AvatarStack people={members} size={40} max={4} />
+      <AvatarStack people={members} size={40} max={3} />
       <View style={styles.groupBody}>
         <Text style={styles.title} numberOfLines={1}>
           {group.name}
@@ -59,11 +60,11 @@ export function GroupCard({ group, ideaCount, onPress }: { group: Group; ideaCou
   );
 }
 
-const SOURCE_TAG = (idea: Idea): { label: string; bg: string } => {
+const SOURCE_TAG = (idea: Idea, fairy: string): { label: string; bg: string } => {
   const who = idea.sourceBy ? PEOPLE[idea.sourceBy]?.name : null;
   switch (idea.source) {
     case "pixie":
-      return { label: "Pixie’s pick", bg: colors.butter };
+      return { label: `${fairy}’s pick`, bg: colors.butter };
     case "screenshot":
       return { label: who ? `From ${who}’s screenshot` : "From a screenshot", bg: colors.tagLavender };
     case "chat":
@@ -75,7 +76,8 @@ const SOURCE_TAG = (idea: Idea): { label: string; bg: string } => {
 
 // An idea in a group's pot, with a tag showing where it came from.
 export function IdeaCard({ idea, onPress }: { idea: Idea; onPress?: () => void }) {
-  const tag = SOURCE_TAG(idea);
+  const { name: fairy } = useFairy();
+  const tag = SOURCE_TAG(idea, fairy);
   const by = idea.sourceBy ? PEOPLE[idea.sourceBy] : null;
   return (
     <Pressable onPress={onPress} disabled={!onPress} accessibilityRole={onPress ? "button" : undefined} style={styles.row}>

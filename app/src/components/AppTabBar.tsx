@@ -1,38 +1,37 @@
-import { router, type Tabs } from "expo-router";
-import type { ComponentProps } from "react";
+import { router, usePathname } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Icon, type IconName } from "@/components/Icon";
+import { useFairy } from "@/lib/fairy";
 import { colors } from "@/lib/theme";
 
-type TabBarProps = Parameters<NonNullable<ComponentProps<typeof Tabs>["tabBar"]>>[0];
+type Tab = { href: "/" | "/village" | "/pixie" | "/profile"; label: string; icon: IconName };
 
-const TABS: Record<string, { label: string; icon: IconName }> = {
-  index: { label: "Home", icon: "home" },
-  village: { label: "Village", icon: "village" },
-  profile: { label: "Profile", icon: "profile" },
-};
-
-// Bottom bar: Home, Village, a raised gold "add an idea" button, Profile.
-// When Pixie gets her own tab (Phase 5), add it between the gold button and Profile.
-export function AppTabBar({ state, navigation }: TabBarProps) {
+// Bottom bar: Home, Village, a raised gold "add an idea" button, your fairy, Profile.
+// It reads the current route from expo-router instead of relying on navigator props, so it works across SDK changes.
+export function AppTabBar() {
   const insets = useSafeAreaInsets();
-  const routes = state.routes.filter((r) => TABS[r.name]);
-  const left = routes.filter((r) => r.name !== "profile");
-  const right = routes.filter((r) => r.name === "profile");
+  const pathname = usePathname();
+  const fairy = useFairy();
 
-  const renderTab = (route: (typeof routes)[number]) => {
-    const meta = TABS[route.name];
-    const focused = state.routes[state.index]?.key === route.key;
+  const left: Tab[] = [
+    { href: "/", label: "Home", icon: "home" },
+    { href: "/village", label: "Village", icon: "village" },
+  ];
+  const right: Tab[] = [
+    { href: "/pixie", label: fairy.name, icon: "fairy" },
+    { href: "/profile", label: "Profile", icon: "profile" },
+  ];
+
+  const renderTab = (t: Tab) => {
+    const focused = pathname === t.href;
     const color = focused ? colors.accent : colors.muted;
-    const onPress = () => {
-      const event = navigation.emit({ type: "tabPress", target: route.key, canPreventDefault: true });
-      if (!focused && !event.defaultPrevented) navigation.navigate(route.name);
-    };
     return (
-      <Pressable key={route.key} onPress={onPress} accessibilityRole="tab" accessibilityState={{ selected: focused }} accessibilityLabel={meta.label} style={styles.tab}>
-        <Icon name={meta.icon} size={24} color={color} />
-        <Text style={[styles.label, { color, fontWeight: focused ? "800" : "700" }]}>{meta.label}</Text>
+      <Pressable key={t.href} onPress={() => router.navigate(t.href)} accessibilityRole="tab" accessibilityState={{ selected: focused }} accessibilityLabel={t.label} style={styles.tab}>
+        <Icon name={t.icon} size={24} color={color} />
+        <Text style={[styles.label, { color, fontWeight: focused ? "800" : "700" }]} numberOfLines={1}>
+          {t.label}
+        </Text>
       </Pressable>
     );
   };
@@ -49,9 +48,9 @@ export function AppTabBar({ state, navigation }: TabBarProps) {
 }
 
 const styles = StyleSheet.create({
-  bar: { flexDirection: "row", alignItems: "center", justifyContent: "space-around", paddingTop: 8, paddingHorizontal: 12, backgroundColor: "#fff", borderTopWidth: 1, borderTopColor: colors.line },
-  tab: { minWidth: 64, minHeight: 44, alignItems: "center", justifyContent: "center", gap: 2 },
-  label: { fontSize: 12 },
+  bar: { flexDirection: "row", alignItems: "center", justifyContent: "space-around", paddingTop: 8, paddingHorizontal: 8, backgroundColor: "#fff", borderTopWidth: 1, borderTopColor: colors.line },
+  tab: { width: 64, minHeight: 44, alignItems: "center", justifyContent: "center", gap: 2 },
+  label: { fontSize: 12, maxWidth: 64 },
   add: {
     width: 56,
     height: 56,

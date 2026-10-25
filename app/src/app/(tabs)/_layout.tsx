@@ -6,9 +6,10 @@ import { session } from "@/mock/session";
 export default function TabsLayout() {
   if (FLAGS.showOnboardingOnLaunch && !session.onboarded) return <Redirect href="/onboarding" />;
   return (
-    <Tabs tabBar={(props) => <AppTabBar {...props} />} screenOptions={{ headerShown: false }}>
+    <Tabs tabBar={() => <AppTabBar />} screenOptions={{ headerShown: false }}>
       <Tabs.Screen name="index" options={{ title: "Home" }} />
       <Tabs.Screen name="village" options={{ title: "Village" }} />
+      <Tabs.Screen name="pixie" options={{ title: "Pixie" }} />
       <Tabs.Screen name="profile" options={{ title: "Profile" }} />
     </Tabs>
   );

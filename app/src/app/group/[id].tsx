@@ -5,6 +5,7 @@ import { AvatarStack } from "@/components/Avatar";
 import { IdeaCard } from "@/components/Cards";
 import { Icon } from "@/components/Icon";
 import { NightHeader } from "@/components/NightHeader";
+import { useFairy } from "@/lib/fairy";
 import { colors, fonts } from "@/lib/theme";
 import { FREQUENCIES } from "@/mock/options";
 import { PEOPLE, groupById, ideasForGroup } from "@/mock/data";
@@ -14,6 +15,7 @@ export default function GroupPage() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const group = groupById(Number(id));
   const [freq, setFreq] = useState<number>(group?.freqDays ?? 14);
+  const { name: fairy } = useFairy();
 
   if (!group) {
     return (
@@ -80,14 +82,14 @@ export default function GroupPage() {
 
         {/* The planner arrives in Phase 3. */}
         <Pressable
-          onPress={() => Alert.alert("Pixie is still learning", "Pixie’s planner arrives in the next phase. For now, add ideas to this pot with the gold button on the Home tab.")}
+          onPress={() => Alert.alert(`${fairy} is still learning`, `${fairy}’s planner arrives in the next phase. For now, add ideas to this pot with the gold button on the Home tab.`)}
           accessibilityRole="button"
           style={styles.ask}
         >
           <Icon name="sparkle" size={28} color={colors.ink} />
           <View>
             <Text style={styles.askTitle}>We should do something…</Text>
-            <Text style={styles.askSub}>Ask Pixie what to do</Text>
+            <Text style={styles.askSub}>Ask {fairy} what to do</Text>
           </View>
         </Pressable>
 

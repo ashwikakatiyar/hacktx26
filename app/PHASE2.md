@@ -19,12 +19,16 @@ npx expo start     # route types regenerate on start (typedRoutes is on)
 | --- | --- | --- |
 | Home tab | `src/app/(tabs)/index.tsx` | Confirmed event cards + circle (group) cards |
 | Village tab | `src/app/(tabs)/village.tsx` | Rows of 4 plots, cottage + profile photo, detail card, locked row, legend |
+| Pixie tab | `src/app/(tabs)/pixie.tsx` | "Make your fairy": wings, dress, hair, name. Saved in memory only (`src/lib/fairy.ts`), so it resets on reload |
 | Profile tab | `src/app/(tabs)/profile.tsx` | Confirmed plans, spending chart, what you owe. Gear icon replays onboarding |
 | Group page | `src/app/group/[id].tsx` | Friendship goals, "Ask Pixie", ideas with source tags |
 | Onboarding | `src/app/onboarding.tsx` | 4 steps. Dropdowns for single/multi choice fields, interest buckets as chips |
 | Invite | `src/app/invite.tsx` | One screen for group page, open plots, and "+ New circle" |
 
 Set `FLAGS.showOnboardingOnLaunch = true` in `src/lib/config.ts` to start fresh launches in onboarding.
+
+The bottom bar (`src/components/AppTabBar.tsx`) reads the current route from expo-router rather than navigator props.
+The fairy's name shows up on Home, the group page, onboarding and the tab label.
 
 ## Cottages
 

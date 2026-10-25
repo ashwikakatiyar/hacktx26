@@ -4,18 +4,20 @@ import { EventCard, GroupCard } from "@/components/Cards";
 import { NightHeader } from "@/components/NightHeader";
 import { Pixie } from "@/components/Pixie";
 import { greeting, plural } from "@/lib/dates";
+import { useFairy } from "@/lib/fairy";
 import { colors, fonts } from "@/lib/theme";
 import { EVENTS, GROUPS, ME, PIXIE_NEW_IDEAS, ideasForGroup } from "@/mock/data";
 
 // Home: confirmed plans, then your circles. Runs on mock data (src/mock/data.ts).
 export default function Home() {
+  const { name: fairy } = useFairy();
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <NightHeader variant="sky" minHeight={214}>
         <View style={styles.hello}>
           <Text style={styles.kicker}>{greeting()}</Text>
           <Text style={styles.h1}>Hello, {ME.name}</Text>
-          <Text style={styles.sub}>Pixie found {plural(PIXIE_NEW_IDEAS, "new idea")} for your circles.</Text>
+          <Text style={styles.sub}>{fairy} found {plural(PIXIE_NEW_IDEAS, "new idea")} for your circles.</Text>
         </View>
         <View style={styles.pixie}>
           <Pixie size={104} />
@@ -27,7 +29,7 @@ export default function Home() {
           <Text style={styles.h2}>Plans in the stars</Text>
           <View style={styles.list}>
             {EVENTS.length === 0 ? (
-              <Text style={styles.empty}>Nothing planned yet. Pick an idea from one of your circles and Pixie will help set it up.</Text>
+              <Text style={styles.empty}>Nothing planned yet. Pick an idea from one of your circles and {fairy} will help set it up.</Text>
             ) : (
               EVENTS.map((e) => <EventCard key={e.id} event={e} onPress={() => router.push({ pathname: "/group/[id]", params: { id: String(e.groupId) } })} />)
             )}

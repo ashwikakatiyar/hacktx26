@@ -5,6 +5,7 @@ export type IconName =
   | "village"
   | "profile"
   | "sparkle"
+  | "fairy"
   | "chevron-right"
   | "chevron-left"
   | "chevron-down"
@@ -42,6 +43,13 @@ export function Icon({ name, size = 24, color = "#2B2347", strokeWidth = 2 }: { 
         <>
           <Path d="M12 2l2.2 6.3L21 10l-6.8 1.7L12 18l-2.2-6.3L3 10l6.8-1.7z" fill={color} />
           <Path d="M19 15l.9 2.1 2.1.9-2.1.9L19 21l-.9-2.1-2.1-.9 2.1-.9z" fill={color} />
+        </>
+      )}
+      {name === "fairy" && (
+        <>
+          <Path d="M12 12c-3-5-8-6-9-3s3 6 9 3z" {...stroke} />
+          <Path d="M12 12c3-5 8-6 9-3s-3 6-9 3z" {...stroke} />
+          <Path d="M12 12l-3 8M12 12l3 8" {...stroke} />
         </>
       )}
       {name === "chevron-right" && <Path d="M9 6l6 6-6 6" {...stroke} />}

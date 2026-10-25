@@ -8,6 +8,7 @@ import { InviteList } from "@/components/InviteList";
 import { Pixie } from "@/components/Pixie";
 import { MultiSelectField, SelectField } from "@/components/Select";
 import { INVITE_LINK } from "@/lib/config";
+import { useFairy } from "@/lib/fairy";
 import { colors, fonts } from "@/lib/theme";
 import { CONTACTS } from "@/mock/data";
 import { ACCESSIBILITY, AGE_RANGES, DIETARY, DISTANCES, EXCLUSIVE, GENDERS, INTEREST_BUCKETS, TRANSPORT } from "@/mock/options";
@@ -19,6 +20,7 @@ const STEPS = 4;
 // so there are no fields we don't use. Nothing is saved yet: this is the mock phase.
 export default function Onboarding() {
   const insets = useSafeAreaInsets();
+  const { name: fairy } = useFairy();
   const [step, setStep] = useState(0);
 
   // step 1: about you
@@ -75,7 +77,7 @@ export default function Onboarding() {
               <Pixie size={64} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.h1}>Once upon a you…</Text>
-                <Text style={styles.lede}>I’m Pixie. Tell me a little about yourself so I can find your kind of adventures.</Text>
+                <Text style={styles.lede}>I’m {fairy}. Tell me a little about yourself so I can find your kind of adventures.</Text>
               </View>
             </View>
             <View style={styles.card}>
@@ -97,7 +99,7 @@ export default function Onboarding() {
         {step === 1 && (
           <>
             <Text style={styles.h1}>The fine print of magic</Text>
-            <Text style={styles.lede}>Pick everything that applies. Pixie will only suggest places that work for you and your friends.</Text>
+            <Text style={styles.lede}>Pick everything that applies. {fairy} will only suggest places that work for you and your friends.</Text>
             <View style={styles.card}>
               <MultiSelectField label="Accessibility needs" options={ACCESSIBILITY} value={access} onChange={setAccess} exclusive={EXCLUSIVE.accessibility} />
               <MultiSelectField label="How do you get around?" options={TRANSPORT} value={transport} onChange={setTransport} />
@@ -109,7 +111,7 @@ export default function Onboarding() {
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.calTitle}>Link Google Calendar</Text>
-                <Text style={styles.calSub}>{calendar ? "Connected. Pixie can see when you’re free." : "So Pixie knows when you’re free."}</Text>
+                <Text style={styles.calSub}>{calendar ? `Connected. ${fairy} can see when you’re free.` : `So ${fairy} knows when you’re free.`}</Text>
               </View>
               {/* Mock toggle. Real Google Calendar sync is a later upgrade. */}
               <Pressable onPress={() => setCalendar((c) => !c)} accessibilityRole="button" style={[styles.darkBtn, calendar && styles.darkBtnOn]}>
