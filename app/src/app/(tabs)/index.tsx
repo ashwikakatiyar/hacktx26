@@ -3,6 +3,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { EventCard, GroupCard } from "@/components/Cards";
 import { NightHeader } from "@/components/NightHeader";
 import { Pixie } from "@/components/Pixie";
+import { useLocalPlans } from "@/lib/plans";
 import { greeting, plural } from "@/lib/dates";
 import { useFairy } from "@/lib/fairy";
 import { colors, fonts } from "@/lib/theme";
@@ -17,6 +18,7 @@ import {
 // Home: confirmed plans, then your circles. Runs on mock data (src/mock/data.ts).
 export default function Home() {
   const { name: fairy } = useFairy();
+  const localPlans = useLocalPlans();
   return (
     <ScrollView
       style={styles.screen}
@@ -41,7 +43,8 @@ export default function Home() {
         <View>
           <Text style={styles.h2}>Plans in the stars</Text>
           <View style={styles.list}>
-            {EVENTS.length === 0 ? (
+            {localPlans.map(p => <Pressable key={p.id} onPress={() => router.push({ pathname: "/group/[id]", params: { id: String(p.groupId) } })} style={{ backgroundColor: colors.card, borderWidth: 1, borderColor: colors.line, borderRadius: 18, padding: 18, gap: 6 }}><Text style={{ color: colors.ink, fontSize: 19, fontWeight: "700" }}>{p.place}</Text><Text style={{ color: colors.muted }}>{p.groupName} · {new Date(p.date).toLocaleDateString()} at {p.time}</Text><Text style={{ color: colors.muted }}>{p.address}</Text><Text style={{ color: colors.green }}>✓ Confirmed (demo)</Text></Pressable>)}
+            {EVENTS.length === 0 && localPlans.length === 0 ? (
               <Text style={styles.empty}>
                 Nothing planned yet. Pick an idea from one of your circles and{" "}
                 {fairy} will help set it up.

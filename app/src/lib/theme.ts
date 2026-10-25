@@ -4,40 +4,34 @@ import { Platform } from "react-native";
 // The original keys (bg, card, ink, muted, line, accent, accentSoft, green, greenSoft) are kept
 // so the Phase 1 screens (add.tsx, card/[id].tsx, CardView) pick up the new look automatically.
 export const colors = {
-  bg: "#F4F0FA",
-  card: "#FFFFFF",
-  ink: "#2B2347",
-  muted: "#5B5278",
-  line: "#DCD4EE",
-  lineSoft: "#E7E0F4",
-  accent: "#5B3FA8", // plum, primary buttons and links
-  accentSoft: "#EDE7FA",
-  green: "#2F6B4F",
-  greenSoft: "#DDF0E5",
-
-  night: "#2B2347",
-  night2: "#3B2F66",
-  night3: "#241C3C",
-  onNight: "#D9CFF2",
-
-  gold: "#E3B04B",
-  goldSoft: "#F7E7B0",
-
-  lavender: "#CBB8F5",
-  mint: "#B9E0C9",
-  rose: "#F4C6D6",
-  butter: "#F6DE9A",
-  tagLavender: "#E1D8F5",
+  // Figma storybook palette (screens 01–11)
+  bg: "#DDE2EA",
+  card: "#FCF7E9",
+  ink: "#4D4038",
+  muted: "#72675E",
+  line: "#65554A",
+  lineSoft: "#D4C8B9",
+  accent: "#918CC8",
+  accentSoft: "#E6DDF1",
+  green: "#698C77",
+  greenSoft: "#DCE8D7",
+  night: "#4D4038",
+  night2: "#64564E",
+  night3: "#39312C",
+  onNight: "#FCF7E9",
+  gold: "#F1C45B",
+  goldSoft: "#FFF1C9",
+  lavender: "#CBB8DE",
+  mint: "#B9D9C6",
+  rose: "#E9B5B8",
+  butter: "#F1C45B",
+  tagLavender: "#E4DAF0",
 };
 
 // Display font for headings. The mockup uses Cormorant Garamond; this falls back to a system serif
 // so no extra packages are needed. To use the real font, load it with expo-font and change it here only.
 export const fonts = {
-  display: Platform.select({
-    ios: "Georgia",
-    android: "serif",
-    default: "Georgia, 'Times New Roman', serif",
-  }) as string,
+  display: Platform.select({ ios: "Inter", android: "sans-serif", default: "Inter, Arial, sans-serif" }) as string,
 };
 
 export const ACTIVITY_TYPES = [

@@ -124,12 +124,7 @@ export default function GroupPage() {
 
         {/* The planner arrives in Phase 3. */}
         <Pressable
-          onPress={() =>
-            Alert.alert(
-              `${fairy} is still learning`,
-              `${fairy}’s planner arrives in the next phase. For now, add ideas to this pot with the gold button on the Home tab.`,
-            )
-          }
+          onPress={() => router.push({ pathname: "/planner/[id]", params: { id: String(group.id) } })}
           accessibilityRole="button"
           style={styles.ask}
         >

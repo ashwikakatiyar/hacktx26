@@ -1,3 +1,4 @@
+import { FigmaFairy } from "@/components/FigmaFairy";
 import Svg, { Circle, Ellipse, Path } from "react-native-svg";
 import { useFairy, type FairyLook } from "@/lib/fairy";
 
@@ -11,6 +12,7 @@ export function Pixie({
 }) {
   const saved = useFairy();
   const { wing, dress, hair } = look ?? saved.look;
+  return <FigmaFairy size={size} look={{ wing, dress, hair }} />;
   return (
     <Svg
       width={size}

@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Image, View } from "react-native";
 import Svg, { Circle, G, Path, Rect } from "react-native-svg";
 import type { CottageState } from "@/lib/config";
 
@@ -13,21 +13,12 @@ export function Cottage({
   state: CottageState;
   width?: number | `${number}%`;
 }) {
-  return (
-    <View style={{ width, aspectRatio: 84 / 96 }}>
-      <Svg
-        width="100%"
-        height="100%"
-        viewBox="0 0 84 96"
-        accessibilityElementsHidden
-        importantForAccessibility="no"
-      >
-        {state === "thriving" && <Thriving />}
-        {state === "weathered" && <Weathered />}
-        {state === "run-down" && <RunDown />}
-      </Svg>
-    </View>
-  );
+  const illustrations = {
+    thriving: require("../../assets/illustrations/cottage-thriving.png"),
+    weathered: require("../../assets/illustrations/cottage-weathered.png"),
+    "run-down": require("../../assets/illustrations/cottage-run-down.png"),
+  };
+  return <Image source={illustrations[state]} resizeMode="contain" style={{ width, height: typeof width === "number" ? width : 76, maxWidth: "100%" }} />;
 }
 
 function Thriving() {
@@ -137,7 +128,7 @@ export function OpenPlot({
   width?: number | `${number}%`;
 }) {
   return (
-    <View style={{ width, aspectRatio: 84 / 96 }}>
+    <View style={{ width, height: typeof width === "number" ? width : 76, maxWidth: "100%" }}>
       <Svg
         width="100%"
         height="100%"
@@ -171,7 +162,7 @@ export function GhostCottage({
   width?: number | `${number}%`;
 }) {
   return (
-    <View style={{ width, aspectRatio: 84 / 96 }}>
+    <View style={{ width, height: typeof width === "number" ? width : 76, maxWidth: "100%" }}>
       <Svg
         width="100%"
         height="100%"

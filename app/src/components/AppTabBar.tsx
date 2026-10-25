@@ -20,7 +20,7 @@ export function AppTabBar() {
 
   const left: Tab[] = [
     { href: "/", label: "Home", icon: "home" },
-    { href: "/village", label: "Village", icon: "village" },
+    { href: "/village", label: "Circles", icon: "village" },
   ];
   const right: Tab[] = [
     { href: "/pixie", label: fairy.name, icon: "fairy" },
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     paddingTop: 8,
     paddingHorizontal: 8,
-    backgroundColor: "#fff",
+    backgroundColor: colors.card,
     borderTopWidth: 1,
     borderTopColor: colors.line,
   },
@@ -92,10 +92,10 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     backgroundColor: colors.gold,
     borderWidth: 4,
-    borderColor: "#fff",
+    borderColor: colors.card,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#2B2347",
+    shadowColor: colors.ink,
     shadowOpacity: 0.2,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 3 },

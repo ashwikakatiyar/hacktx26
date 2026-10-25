@@ -38,10 +38,11 @@ export default function Village() {
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      <NightHeader>
-        <Text style={styles.h1}>Your village</Text>
+      <View style={styles.header}>
+        <Pressable onPress={() => router.back()} accessibilityLabel="Go back" style={styles.back}><Text style={styles.backText}>‹</Text></Pressable>
+        <Text style={styles.h1}>Your village <Text style={{ fontSize: 23 }}>🌿</Text></Text>
         <Text style={styles.summary}>{village.summary}</Text>
-      </NightHeader>
+      </View>
 
       <View style={styles.main}>
         <DetailCard friend={selected} />
@@ -53,17 +54,12 @@ export default function Village() {
               <View style={styles.cells}>
                 {[0, 1, 2, 3].map((k) => (
                   <View key={k} style={styles.ghost}>
-                    <GhostCottage />
+                    <View style={{ width: 32, height: 32, borderRadius: 16, borderWidth: 1, borderColor: colors.line, alignItems: "center", justifyContent: "center" }}><Text style={{ fontSize: 20, color: colors.ink }}>+</Text></View><Text style={{ fontSize: 10, color: colors.muted }}>Locked</Text>
                   </View>
                 ))}
               </View>
               <View style={styles.lock}>
-                <Icon
-                  name="lock"
-                  size={22}
-                  color={colors.accent}
-                  strokeWidth={2.2}
-                />
+                
                 <Text style={styles.lockText}>{row.lockText}</Text>
               </View>
             </View>
@@ -145,12 +141,8 @@ function DetailCard({ friend }: { friend: VillageFriend | null }) {
         <View style={styles.detailWho}>
           <Text style={styles.detailName}>{friend.name}</Text>
           <Text style={styles.detailMeta}>
-            {plural(friend.hangoutCount, "hangout")} · last together{" "}
-            {agoLabel(friend.daysSince)}
+            {plural(friend.hangoutCount, "hangout")} · last together {agoLabel(friend.daysSince)}
           </Text>
-        </View>
-        <View style={[styles.badge, { backgroundColor: BADGE_BG[state] }]}>
-          <Text style={styles.badgeText}>{COTTAGE_LABEL[state]} cottage</Text>
         </View>
       </View>
 
@@ -162,12 +154,12 @@ function DetailCard({ friend }: { friend: VillageFriend | null }) {
         ) : (
           friend.outings.map((o) => (
             <View key={o.id} style={styles.outing}>
-              <Icon name="sparkle" size={18} color={colors.gold} />
+              
               <View style={styles.outingBody}>
                 <Text style={styles.outingName} numberOfLines={1}>
                   {o.name}
                 </Text>
-                <Text style={styles.outingType}>{o.type}</Text>
+                
               </View>
               <Text style={styles.outingDate}>
                 {shortDate(daysAgoDate(o.daysAgo))}
@@ -178,8 +170,7 @@ function DetailCard({ friend }: { friend: VillageFriend | null }) {
       </View>
 
       <Text style={styles.footnote}>
-        Shows only the outings you did together. Who else came along isn’t
-        listed.
+        Shows only the outings you did together.
       </Text>
 
       {/* Stand-in until the planner flow exists (Phase 3): opens the circle you share, where your saved ideas live. */}
@@ -195,7 +186,7 @@ function DetailCard({ friend }: { friend: VillageFriend | null }) {
         accessibilityRole="button"
         style={styles.plan}
       >
-        <Text style={styles.planText}>Plan something with {friend.name}</Text>
+        <Text style={styles.planText}>Plan a catch-up ›</Text>
       </Pressable>
     </View>
   );
@@ -204,24 +195,27 @@ function DetailCard({ friend }: { friend: VillageFriend | null }) {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   content: { paddingBottom: 28 },
+  header: { paddingHorizontal: 20, paddingTop: 20, paddingBottom: 12 },
+  back: { width: 32, height: 32, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.card, alignItems: "center", justifyContent: "center", marginBottom: 18 },
+  backText: { fontSize: 26, color: colors.ink, marginTop: -4 },
   h1: {
     fontFamily: fonts.display,
-    fontSize: 34,
+    fontSize: 30,
     lineHeight: 36,
-    fontWeight: "700",
-    color: "#fff",
+    fontWeight: "400",
+    color: "#51443B",
     marginTop: 8,
   },
   summary: {
     fontSize: 14,
     fontWeight: "600",
-    color: colors.onNight,
+    color: "#51443B",
     marginTop: 3,
   },
   main: { paddingHorizontal: 20, paddingTop: 16, gap: 16 },
 
   detail: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FCF7EB",
     borderWidth: 1,
     borderColor: colors.line,
     borderRadius: 20,
@@ -241,13 +235,13 @@ const styles = StyleSheet.create({
     color: colors.muted,
     marginTop: 4,
   },
-  detailHead: { flexDirection: "row", alignItems: "center", gap: 12 },
+  detailHead: { flexDirection: "row", alignItems: "flex-start", gap: 18 },
   detailWho: { flex: 1, minWidth: 0 },
   detailName: {
     fontFamily: fonts.display,
-    fontSize: 26,
+    fontSize: 21,
     lineHeight: 28,
-    fontWeight: "700",
+    fontWeight: "400",
     color: colors.ink,
   },
   detailMeta: {
@@ -292,7 +286,9 @@ const styles = StyleSheet.create({
     marginTop: 12,
     minHeight: 48,
     borderRadius: 14,
-    backgroundColor: colors.gold,
+    backgroundColor: "#FCF7EB",
+    borderWidth: 1,
+    borderColor: "#55483F",
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 16,
@@ -300,8 +296,10 @@ const styles = StyleSheet.create({
   planText: { fontSize: 15, fontWeight: "800", color: colors.ink },
 
   rowBox: {
-    backgroundColor: colors.accentSoft,
-    borderRadius: 22,
+    backgroundColor: "#DDE5CD",
+    borderWidth: 1,
+    borderColor: "#55483F",
+    borderRadius: 18,
     paddingHorizontal: 12,
     paddingTop: 12,
     paddingBottom: 10,
@@ -317,19 +315,22 @@ const styles = StyleSheet.create({
   rowTitle: {
     fontFamily: fonts.display,
     fontSize: 20,
-    fontWeight: "700",
+    fontWeight: "400",
     color: colors.ink,
   },
   rowSub: { fontSize: 12, fontWeight: "700", color: colors.muted },
-  cells: { flexDirection: "row" },
-  ghost: { flex: 1 },
+  cells: { flexDirection: "row", alignItems: "flex-start", minHeight: 118 },
+  ghost: { flex: 1, alignItems: "center", paddingTop: 42, gap: 27 },
+  lockedCircle: { width: 32, height: 32, borderRadius: 16, borderWidth: 1, borderColor: colors.line, alignItems: "center", justifyContent: "center" },
+  plusMark: { fontSize: 18, color: colors.ink },
+  lockedLabel: { fontSize: 10, color: colors.muted },
   lock: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
     marginTop: 8,
     padding: 12,
-    backgroundColor: "#fff",
+    backgroundColor: "transparent",
     borderRadius: 14,
   },
   lockText: {
@@ -341,7 +342,7 @@ const styles = StyleSheet.create({
   },
 
   legend: {
-    backgroundColor: "#fff",
+    backgroundColor: "#FCF7EB",
     borderWidth: 1,
     borderColor: colors.line,
     borderRadius: 20,

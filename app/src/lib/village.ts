@@ -67,7 +67,7 @@ export function buildVillage(friends: VillageFriend[]): Village {
     rows.push({
       locked: false,
       index: r,
-      title: `Row ${r + 1}`,
+      title: ["Littlefield Court", "Painter Lane", "Kinsolving Road"][r] ?? `Village Lane ${r + 1}`,
       sub: `${filled} of ${size} plots filled`,
       cells,
     });
@@ -77,7 +77,7 @@ export function buildVillage(friends: VillageFriend[]): Village {
   rows.push({
     locked: true,
     index: unlockedRows,
-    title: `Row ${unlockedRows + 1}`,
+    title: ["Littlefield Court", "Painter Lane", "Kinsolving Road", "Welch Avenue"][unlockedRows] ?? `Village Lane ${unlockedRows + 1}`,
     sub: "Locked",
     lockText:
       openPlots > 0

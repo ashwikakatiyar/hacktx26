@@ -27,12 +27,12 @@ export function CottagePlot({
     >
       <Avatar
         person={friend}
-        size={48}
-        border={selected ? 4 : 2}
-        borderColor={selected ? colors.gold : "#FFFFFF"}
+        size={30}
+        border={1}
+        borderColor={colors.line}
         style={styles.photo}
       />
-      <Cottage state={state} />
+      <Cottage state={state} width={76} />
       <Text style={styles.name} numberOfLines={1}>
         {friend.name}
       </Text>
@@ -52,25 +52,24 @@ export function OpenPlotCell({ onPress }: { onPress: () => void }) {
       <View style={styles.dashed}>
         <Text style={styles.plus}>+</Text>
       </View>
-      <OpenPlot />
+      <View style={{ height: 48 }} />
       <Text style={styles.name}>Open plot</Text>
-      <Text style={styles.state}>Invite a friend</Text>
+      
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  cell: { flex: 1, alignItems: "center", minWidth: 0 },
+  cell: { flex: 1, alignItems: "center", minWidth: 0, justifyContent: "flex-start" },
   photo: { marginBottom: 2, zIndex: 1 },
-  name: { fontSize: 13, fontWeight: "800", color: colors.ink, marginTop: 4 },
-  state: { fontSize: 11, fontWeight: "700", color: colors.muted },
+  name: { fontSize: 11, fontWeight: "600", color: colors.ink, marginTop: 4 },
+  state: { fontSize: 9, fontWeight: "400", color: colors.muted },
   dashed: {
-    width: 48,
-    height: 48,
+    width: 32,
+    height: 32,
     borderRadius: 24,
-    borderWidth: 2,
-    borderStyle: "dashed",
-    borderColor: "#A98BE8",
+    borderWidth: 1,
+    borderColor: colors.line,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 2,
