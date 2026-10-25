@@ -80,7 +80,8 @@ async function offerCard(to: string, userId: number, cardId: number, notes: stri
 async function handleIdea(to: string, user: { id: number }, input: { text?: string; imageBase64?: string }) {
   const { draft, meta } = await buildCard(input);
   const id = await insertCard(draft, user.id);
-  if (meta.fallbacks.length) console.log("[whatsapp] card", id, "fallbacks:", meta.fallbacks);
+  if (meta.fallbacks.length || meta.errors.length)
+    console.log("[whatsapp] card", id, "fallbacks:", meta.fallbacks, "errors:", meta.errors);
   await offerCard(to, user.id, id);
 }
 
@@ -115,7 +116,7 @@ async function handleChoice(to: string, user: { id: number }, choice: string) {
       return sendText(
         to,
         body.proposal
-          ? "I found a good idea, but I can't find a time when everyone is free. 🧚 Open Kindred and add your free times, then tap Plan it again."
+          ? "I found a good idea, but I can't find a time when everyone is free. 🧚 Open Round Table and add your free times, then tap Plan it again."
           : "This group needs at least one shared idea before I can plan. Send me a place first! 🧚",
       );
     if (!body.event_id) return sendText(to, "Something went wrong planning that. Try again in the app.");
@@ -153,7 +154,7 @@ export async function handleMessage(msg: WaMessage) {
   if (!user)
     return sendText(
       to,
-      "Hi! I don't know this number yet. Join Kindred in the app and link your WhatsApp number there.",
+      "Hi! I don't know this number yet. Join Round Table in the app and link your WhatsApp number there.",
     );
 
   if (msg.type === "interactive") {
