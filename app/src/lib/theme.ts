@@ -4,14 +4,14 @@ import type { ViewStyle } from "react-native";
 // Contrast notes (WCAG AA): ink/muted on card >= 5:1, accent on card >= 4.5:1, white on accent/green >= 4.5:1.
 // The original keys are kept so every screen picks the new values up automatically.
 export const colors = {
-  bg: "#E1E5EE",
-  card: "#FFFBF0", // parchment
+  bg: "#DDE3EC",
+  card: "#FFF9EA", // parchment
   cardAlt: "#F7F0E0", // a notch darker, for inset areas
   ink: "#43362F",
   muted: "#6A5F57",
-  line: "#E2D6C3", // soft card border
+  line: "#57483F", // the handoff uses a fine dark outline around surfaces
   lineSoft: "#ECE3D2", // dividers
-  lineStrong: "#B5A594", // inputs and outline buttons
+  lineStrong: "#57483F", // inputs and outline buttons
   accent: "#7568B5",
   accentDeep: "#5A4E99",
   accentSoft: "#EAE3F5",
@@ -38,15 +38,15 @@ export const colors = {
 // Fonts: Fraunces (soft storybook serif) for headings, Nunito (rounded) for everything else.
 // These are logical names; the Text wrapper in components/Text.tsx maps them plus fontWeight to the real font files.
 export const fonts = {
-  display: "Fraunces",
+  display: "Nunito",
   body: "Nunito",
 };
 
-export const radius = { sm: 12, md: 16, lg: 22, pill: 999 } as const;
+export const radius = { sm: 8, md: 12, lg: 14, pill: 999 } as const;
 
 // Soft, warm shadows instead of heavy outlines. boxShadow works on iOS, Android and web.
 export const shadow = {
-  card: { boxShadow: "0 2px 10px rgba(67, 54, 47, 0.08), 0 1px 2px rgba(67, 54, 47, 0.06)" } as ViewStyle,
+  card: {} as ViewStyle,
   lift: { boxShadow: "0 8px 24px rgba(67, 54, 47, 0.16), 0 2px 6px rgba(67, 54, 47, 0.08)" } as ViewStyle,
   glow: { boxShadow: "0 4px 14px rgba(241, 196, 91, 0.55)" } as ViewStyle,
 };
@@ -57,7 +57,6 @@ export const cardSurface: ViewStyle = {
   borderWidth: 1,
   borderColor: colors.line,
   borderRadius: radius.lg,
-  ...shadow.card,
 };
 
 export const ACTIVITY_TYPES = [

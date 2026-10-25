@@ -1,0 +1,15 @@
+{
+  "extraction": {
+    "name": "Franklin Barbecue",
+    "activity_type": "dinner",
+    "location": "Austin",
+    "dietary_tags": []
+  },
+  "place": {
+    "name": "Franklin Barbecue",
+    "address": "900 E 11th St, Austin, TX 78702",
+    "image_url": "https://lh3.googleusercontent.com/grass-cs/AABkmLdYvRr-DbAO1ZM6DjGE_D9jI3Ucl596Z0bGR0ZfYA2G10KxRaGHJmYkQO_HSyt-psrkPKAZW9DWK8U4vgSwBoQ4g9lPEN74nUsDCbjYzK6i6MHRIQA6t-QgJXL3hAgIxmMNI1e-dg=w1000-h1000-c-n",
+    "price_level": null,
+    "rating": 4.7
+  }
+}

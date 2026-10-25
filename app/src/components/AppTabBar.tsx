@@ -3,7 +3,6 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { Text } from "@/components/Text";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Icon, type IconName } from "@/components/Icon";
-import { useFairy } from "@/lib/fairy";
 import { colors } from "@/lib/theme";
 
 type Tab = {
@@ -17,14 +16,13 @@ type Tab = {
 export function AppTabBar() {
   const insets = useSafeAreaInsets();
   const pathname = usePathname();
-  const fairy = useFairy();
 
   const left: Tab[] = [
     { href: "/", label: "Home", icon: "home" },
     { href: "/village", label: "Circles", icon: "village" },
   ];
   const right: Tab[] = [
-    { href: "/pixie", label: fairy.name, icon: "fairy" },
+    { href: "/pixie", label: "Pixie", icon: "fairy" },
     { href: "/profile", label: "Profile", icon: "profile" },
   ];
 
@@ -62,7 +60,7 @@ export function AppTabBar() {
         accessibilityLabel="Add an idea"
         style={({ pressed }) => [styles.add, pressed && { transform: [{ scale: 0.95 }] }]}
       >
-        <Icon name="sparkle" size={26} color={colors.ink} />
+        <Icon name="plus" size={24} color={colors.ink} />
       </Pressable>
       {right.map(renderTab)}
     </View>
@@ -79,7 +77,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.card,
     borderTopWidth: 1,
     borderTopColor: colors.line,
-    boxShadow: "0 -6px 20px rgba(67, 54, 47, 0.08)",
   },
   tab: {
     width: 68,
@@ -107,6 +104,5 @@ const styles = StyleSheet.create({
     borderColor: colors.card,
     alignItems: "center",
     justifyContent: "center",
-    boxShadow: "0 6px 16px rgba(217, 161, 46, 0.55)",
   },
 });

@@ -56,6 +56,7 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="onboarding" options={{ gestureEnabled: false }} />
         <Stack.Screen name="group/[id]" />
+        <Stack.Screen name="event/[id]" />
         <Stack.Screen name="planner/[id]" />
         {/* Modals draw their own header (ScreenHeader) so the title matches the rest of the app. */}
         <Stack.Screen name="invite" options={{ presentation: "modal" }} />

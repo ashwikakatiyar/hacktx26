@@ -2,9 +2,8 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { Avatar, AvatarStack } from "@/components/Avatar";
 import { Icon } from "@/components/Icon";
 import { PriceTag } from "@/components/CardView";
-import { PlaceArt } from "@/components/PlaceArt";
+import { ActivityArt } from "@/components/PlaceArt";
 import { Text } from "@/components/Text";
-import { Pill } from "@/components/ui";
 import { whenLabel, plural } from "@/lib/dates";
 import { useFairy } from "@/lib/fairy";
 import { cardSurface, colors, fonts } from "@/lib/theme";
@@ -23,7 +22,7 @@ export function EventCard({
   compact?: boolean;
   onPress?: () => void;
 }) {
-  const size = compact ? 76 : 92;
+  const size = compact ? 48 : 56;
   return (
     <Pressable
       onPress={onPress}
@@ -31,25 +30,31 @@ export function EventCard({
       accessibilityRole={onPress ? "button" : undefined}
       style={(s) => [styles.row, pressed(s)]}
     >
-      <PlaceArt type={event.activityType} imageUrl={event.imageUrl} size={size} seed={event.title} />
-      <View style={styles.rowBody}>
+      <ActivityArt type={event.activityType} size={size} height={compact ? 64 : 72} />
+      <View style={[styles.rowBody, compact && styles.compactBody]}>
         <View style={styles.inline}>
-          {!compact && <Pill label="Confirmed" icon="check" bg={colors.green} fg="#fff" />}
-          <PriceTag level={event.priceLevel} />
+          <Text style={styles.status}>Confirmed</Text>
+          {!compact && <PriceTag level={event.priceLevel} />}
         </View>
         <Text style={styles.title} numberOfLines={2}>
           {event.title}
         </Text>
-        <View style={styles.inline}>
-          <Icon name="pin" size={13} color={colors.muted} strokeWidth={2.2} />
-          <Text style={[styles.meta, { flex: 1 }]} numberOfLines={1}>
-            {capitalize(event.activityType)} · {event.address}
-          </Text>
-        </View>
-        <View style={styles.inline}>
-          <Icon name="clock" size={13} color={colors.accent} strokeWidth={2.4} />
+        {compact ? (
           <Text style={styles.when}>{whenLabel(event.startsAt)}</Text>
-        </View>
+        ) : (
+          <>
+            <View style={styles.inline}>
+              <Icon name="pin" size={13} color={colors.muted} strokeWidth={2.2} />
+              <Text style={[styles.meta, { flex: 1 }]} numberOfLines={1}>
+                {capitalize(event.activityType)} · {event.address}
+              </Text>
+            </View>
+            <View style={styles.inline}>
+              <Icon name="clock" size={13} color={colors.accent} strokeWidth={2.4} />
+              <Text style={styles.when}>{whenLabel(event.startsAt)}</Text>
+            </View>
+          </>
+        )}
       </View>
     </Pressable>
   );
@@ -114,7 +119,7 @@ export function IdeaCard({ idea, onPress }: { idea: Idea; onPress?: () => void }
       accessibilityRole={onPress ? "button" : undefined}
       style={(s) => [styles.row, pressed(s)]}
     >
-      <PlaceArt type={idea.activityType} imageUrl={idea.imageUrl} size={88} seed={idea.name} />
+      <ActivityArt type={idea.activityType} size={52} height={64} />
       <View style={styles.rowBody}>
         <View style={[styles.tag, { backgroundColor: tag.bg }]}>
           {by && <Avatar person={by} size={16} />}
@@ -143,24 +148,25 @@ const styles = StyleSheet.create({
   row: {
     ...cardSurface,
     flexDirection: "row",
-    gap: 14,
-    padding: 12,
-    borderRadius: 22,
+    gap: 12,
+    padding: 10,
+    borderRadius: 14,
   },
-  rowBody: { flex: 1, minWidth: 0, gap: 4, justifyContent: "center" },
+  rowBody: { flex: 1, minWidth: 0, gap: 2, justifyContent: "center" },
+  compactBody: { gap: 1 },
   inline: { flexDirection: "row", alignItems: "center", gap: 6, flexWrap: "wrap" },
-  groupRow: { alignItems: "center", gap: 12, padding: 14 },
+  groupRow: { alignItems: "center", gap: 12, padding: 10, minHeight: 70 },
   groupBody: { flex: 1, minWidth: 0 },
   title: {
     fontFamily: fonts.display,
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "600",
     color: colors.ink,
-    lineHeight: 24,
-    letterSpacing: -0.2,
+    lineHeight: 20,
   },
-  meta: { fontSize: 13, fontWeight: "600", color: colors.muted },
-  when: { fontSize: 13, fontWeight: "800", color: colors.accent },
+  meta: { fontSize: 11, fontWeight: "600", color: colors.muted },
+  when: { fontSize: 11, fontWeight: "600", color: colors.muted },
+  status: { fontSize: 10, color: colors.muted },
   ideas: {
     flexDirection: "row",
     alignItems: "center",
@@ -176,10 +182,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 5,
     borderRadius: 999,
-    paddingHorizontal: 9,
-    paddingVertical: 3,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
     alignSelf: "flex-start",
     maxWidth: "100%",
   },
-  tagText: { fontSize: 12, fontWeight: "800", color: colors.ink, flexShrink: 1 },
+  tagText: { fontSize: 10, fontWeight: "700", color: colors.ink, flexShrink: 1 },
 });

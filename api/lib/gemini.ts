@@ -72,7 +72,7 @@ export async function extractFromInput(input: {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body,
-            signal: AbortSignal.timeout(15_000),
+            signal: AbortSignal.timeout(8_000),
           },
         );
         if (res.ok) {
@@ -83,7 +83,9 @@ export async function extractFromInput(input: {
         // Only busy/overloaded errors are worth retrying; a bad key or model name will not fix itself.
         if (![429, 500, 502, 503, 504].includes(res.status)) break;
       } catch (e: any) {
+        // Timeout or network error: don't wait on this model again, move to the next one.
         lastError = `${m}: ${e?.message ?? e}`;
+        break;
       }
       await new Promise((ok) => setTimeout(ok, 700));
     }

@@ -3,12 +3,12 @@ import { useState } from "react";
 import { Alert, Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "@/components/Text";
 import { AvatarStack } from "@/components/Avatar";
+import { AppTabBar } from "@/components/AppTabBar";
 import { IdeaCard } from "@/components/Cards";
 import { Icon } from "@/components/Icon";
-import { NightHeader } from "@/components/NightHeader";
 import { useFairy } from "@/lib/fairy";
 import { cardSurface, colors, fonts } from "@/lib/theme";
-import { BackButton, Chip, SectionTitle } from "@/components/ui";
+import { BackButton, Chip, SectionTitle, Sprig } from "@/components/ui";
 import { FREQUENCIES } from "@/mock/options";
 import { PEOPLE, groupById, ideasForGroup } from "@/mock/data";
 
@@ -38,24 +38,23 @@ export default function GroupPage() {
   const ideas = ideasForGroup(group.id);
 
   return (
+    <View style={styles.screen}>
     <ScrollView
-      style={styles.screen}
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      <NightHeader>
+      <View style={styles.header}>
         <View style={styles.titleRow}>
-          <BackButton onDark />
-          <Text style={styles.h1} numberOfLines={2}>
-            {group.name}
-          </Text>
+          <BackButton />
+          <Text style={styles.h1} numberOfLines={1}>{group.name}</Text>
+          <Sprig size={26} />
         </View>
         <View style={styles.peopleRow}>
           <AvatarStack
             people={members}
             size={44}
             border={2}
-            borderColor={colors.nightMid}
+            borderColor={colors.bg}
             max={5}
           />
           <Pressable
@@ -71,7 +70,7 @@ export default function GroupPage() {
             <Text style={styles.inviteText}>+ Invite a friend</Text>
           </Pressable>
         </View>
-      </NightHeader>
+      </View>
 
       <View style={styles.main}>
         <View style={styles.goals}>
@@ -115,118 +114,89 @@ export default function GroupPage() {
                 message or screenshot, and pick this circle.
               </Text>
             ) : (
-              ideas.map((idea) => <IdeaCard key={idea.id} idea={idea} />)
+              ideas.map((idea) => (
+                <IdeaCard
+                  key={idea.id}
+                  idea={idea}
+                  onPress={() => router.push({ pathname: "/event/[id]", params: { id: `idea-${idea.id}` } })}
+                />
+              ))
             )}
           </View>
         </View>
       </View>
     </ScrollView>
+    <AppTabBar />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
-  content: { paddingBottom: 32 },
-  titleRow: { flexDirection: "row", alignItems: "center", gap: 12 },
-  back: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  content: { paddingBottom: 16 },
+  header: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 18, gap: 12 },
+  titleRow: { flexDirection: "row", alignItems: "center", gap: 10 },
   h1: {
     flex: 1,
-    fontFamily: fonts.display,
-    fontSize: 36,
-    lineHeight: 42,
+    fontSize: 24,
+    lineHeight: 30,
     fontWeight: "600",
-    color: "#fff",
-    letterSpacing: -0.5,
+    color: colors.ink,
   },
   peopleRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 16,
+    marginTop: 4,
   },
   invite: {
-    minHeight: 44,
+    minHeight: 42,
     paddingHorizontal: 16,
-    borderRadius: 999,
-    borderWidth: 1.5,
-    borderColor: colors.gold,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.lineStrong,
+    backgroundColor: colors.card,
     alignItems: "center",
     justifyContent: "center",
   },
-  inviteText: { fontSize: 14, fontWeight: "800", color: colors.goldSoft },
+  inviteText: { fontSize: 13, fontWeight: "600", color: colors.ink },
 
-  main: { paddingHorizontal: 20, paddingTop: 4, gap: 20 },
-  goals: { ...cardSurface, padding: 16, gap: 10 },
+  main: { paddingHorizontal: 20, paddingTop: 4, gap: 14 },
+  goals: { ...cardSurface, padding: 14, gap: 9 },
   h2: {
-    fontFamily: fonts.display,
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "600",
     color: colors.ink,
   },
   label: { fontSize: 13, fontWeight: "700", color: colors.muted },
   freqRow: { flexDirection: "row", gap: 8, flexWrap: "wrap" },
-  freq: {
-    flex: 1,
-    minHeight: 44,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.line,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 4,
-  },
-  freqOn: { backgroundColor: colors.accent, borderColor: colors.accent },
-  freqText: {
-    fontSize: 13,
-    fontWeight: "800",
-    color: colors.ink,
-    textAlign: "center",
-  },
-  freqTextOn: { color: "#fff" },
   tags: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
   tag: {
     backgroundColor: colors.accentSoft,
     borderRadius: 999,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
   },
   tagText: { fontSize: 13, fontWeight: "700", color: colors.ink },
 
   ask: {
-    minHeight: 72,
-    borderRadius: 22,
+    minHeight: 56,
+    borderRadius: 12,
     backgroundColor: colors.gold,
     flexDirection: "row",
     alignItems: "center",
     gap: 14,
-    paddingHorizontal: 18,
-    paddingVertical: 10,
-    boxShadow: "0 4px 0 #D9A12E, 0 10px 20px rgba(217,161,46,0.25)",
+    paddingHorizontal: 14,
+    paddingVertical: 8,
   },
   askTitle: {
-    fontFamily: fonts.display,
-    fontSize: 22,
-    lineHeight: 26,
+    fontSize: 16,
+    lineHeight: 20,
     fontWeight: "600",
     color: colors.ink,
   },
   askSub: { fontSize: 13, fontWeight: "700", color: colors.ink },
 
-  h2Plain: {
-    fontFamily: fonts.display,
-    fontSize: 22,
-    fontWeight: "700",
-    color: colors.ink,
-    marginBottom: 10,
-  },
   list: { gap: 12 },
   empty: {
     fontSize: 14,

@@ -4,12 +4,10 @@ import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "@/components/Text";
 import { Avatar } from "@/components/Avatar";
 import { EventCard } from "@/components/Cards";
-import { Icon } from "@/components/Icon";
-import { NightHeader } from "@/components/NightHeader";
 import { SpendingChart } from "@/components/SpendingChart";
 import { plural } from "@/lib/dates";
 import { cardSurface, colors, fonts } from "@/lib/theme";
-import { SectionTitle } from "@/components/ui";
+import { SectionTitle, Sprig } from "@/components/ui";
 import {
   EVENTS,
   GROUPS,
@@ -35,13 +33,13 @@ export default function Profile() {
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      <NightHeader>
+      <View style={styles.profileHead}>
         <View style={styles.headRow}>
           <Avatar
             person={ME}
-            size={80}
-            border={3}
-            borderColor={colors.gold}
+            size={58}
+            border={1}
+            borderColor={colors.lineStrong}
           />
           <View style={styles.headBody}>
             <Text style={styles.h1}>{ME.name}</Text>
@@ -57,23 +55,21 @@ export default function Profile() {
               <Text style={styles.visitText}>Visit your village</Text>
             </Pressable>
           </View>
-          <Pressable
-            onPress={() => router.push("/onboarding")}
-            accessibilityRole="button"
-            accessibilityLabel="Edit your preferences"
-            style={styles.gear}
-          >
-            <Icon name="gear" size={22} color={colors.goldSoft} />
-          </Pressable>
+          <Sprig size={30} />
         </View>
-      </NightHeader>
+      </View>
 
       <View style={styles.main}>
         <View>
           <SectionTitle>Your confirmed plans</SectionTitle>
           <View style={styles.list}>
             {EVENTS.map((e) => (
-              <EventCard key={e.id} event={e} compact />
+              <EventCard
+                key={e.id}
+                event={e}
+                compact
+                onPress={() => router.push({ pathname: "/event/[id]", params: { id: `event-${e.id}` } })}
+              />
             ))}
           </View>
         </View>
@@ -135,45 +131,34 @@ export default function Profile() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   content: { paddingBottom: 28 },
+  profileHead: { paddingHorizontal: 20, paddingTop: 16, paddingBottom: 16 },
   headRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 16,
-    paddingTop: 8,
+    gap: 10,
   },
   headBody: { flex: 1 },
   h1: {
     fontFamily: fonts.display,
-    fontSize: 38,
-    lineHeight: 44,
+    fontSize: 26,
+    lineHeight: 32,
     fontWeight: "600",
-    color: "#fff",
-    letterSpacing: -0.5,
+    color: colors.ink,
   },
   headSub: {
     fontSize: 14,
     fontWeight: "600",
-    color: colors.onNight,
+    color: colors.muted,
     marginTop: 4,
   },
   visit: { minHeight: 44, justifyContent: "center", alignSelf: "flex-start" },
   visitText: {
     fontSize: 14,
     fontWeight: "800",
-    color: colors.goldSoft,
-    textDecorationLine: "underline",
+    color: colors.ink,
+    textDecorationLine: "none",
   },
-  gear: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    borderWidth: 1.5,
-    borderColor: colors.gold,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  main: { paddingHorizontal: 20, paddingTop: 4, gap: 24 },
+  main: { paddingHorizontal: 20, paddingTop: 4, gap: 14 },
   h2: {
     fontFamily: fonts.display,
     fontSize: 24,

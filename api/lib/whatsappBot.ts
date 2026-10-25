@@ -64,7 +64,11 @@ async function offerCard(to: string, userId: number, cardId: number, notes: stri
   );
   const lines = [
     card.needs_review
-      ? `I added "${card.name}" but couldn't find the price or photo. You can fix it in the app.`
+      ? `I added "${card.name}"${card.address ? ` (${card.address})` : ""} but couldn't find ${
+          [card.price_level == null && "the price", !card.image_url && "a photo"]
+            .filter(Boolean)
+            .join(" or ") || "some details"
+        }. You can fix it in the app.`
       : `🧚 Added to your list:\n*${card.name}* · ${price(card.price_level)} · ${card.activity_type ?? "idea"}${card.address ? `\n${card.address}` : ""}`,
     ...notes,
   ];

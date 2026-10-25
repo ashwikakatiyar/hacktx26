@@ -40,7 +40,7 @@ function resolve(style: StyleProp<TextStyle>): TextStyle {
       : flat.fontWeight === "bold"
         ? "700"
         : String(flat.fontWeight);
-  const table = flat.fontFamily === fonts.display ? FRAUNCES : NUNITO;
+  const table = flat.fontFamily === "Fraunces" ? FRAUNCES : NUNITO;
   // Only remap our two logical families (or the default). Anything else is left alone.
   if (flat.fontFamily && flat.fontFamily !== fonts.display && flat.fontFamily !== fonts.body) {
     return {};
