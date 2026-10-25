@@ -1,7 +1,8 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
-import { ActivityArt } from "@/components/PlaceArt";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { PlaceArt } from "@/components/PlaceArt";
 import { AvatarStack } from "@/components/Avatar";
 import { AppTabBar } from "@/components/AppTabBar";
 import { Icon } from "@/components/Icon";
@@ -13,6 +14,7 @@ import { EVENTS, IDEAS, PEOPLE, groupById } from "@/mock/data";
 
 export default function EventDetail() {
   const { id = "" } = useLocalSearchParams<{ id: string }>();
+  const insets = useSafeAreaInsets();
   const localPlans = useLocalPlans();
   const [attending, setAttending] = useState(false);
   let title = "";
@@ -66,9 +68,9 @@ export default function EventDetail() {
 
   return (
     <View style={styles.screen}>
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={[styles.content, { paddingTop: Math.max(insets.top, 12) + 6 }]} showsVerticalScrollIndicator={false}>
         <View style={styles.top}><BackButton /><View style={{ flex: 1 }} /></View>
-        <ActivityArt type={type} width="100%" height={130} large />
+        <PlaceArt type={type} width="100%" height={130} radius={14} seed={title} />
         <View style={styles.tags}>
           <Text style={styles.tag}>{"$".repeat(price) + " · " + (price === 1 ? "$10–$25" : price === 2 ? "$25–$50" : "$50+")}</Text>
           <Text style={styles.tag}>{type}</Text>
@@ -98,7 +100,7 @@ export default function EventDetail() {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
-  content: { paddingHorizontal: 20, paddingTop: 6, paddingBottom: 18, gap: 12 },
+  content: { paddingHorizontal: 20, paddingBottom: 18, gap: 12 },
   top: { flexDirection: "row", alignItems: "center", minHeight: 44 },
   tags: { flexDirection: "row", gap: 8 },
   tag: { backgroundColor: "#DCE4C8", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 999, color: colors.ink, fontSize: 11 },

@@ -1,5 +1,6 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Alert, Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "@/components/Text";
 import { AvatarStack } from "@/components/Avatar";
@@ -15,6 +16,7 @@ import { PEOPLE, groupById, ideasForGroup } from "@/mock/data";
 // Group page: friendship goals, an "ask Pixie" call to action, and every idea shared into the group.
 export default function GroupPage() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const insets = useSafeAreaInsets();
   const group = groupById(Number(id));
   const [freq, setFreq] = useState<number>(group?.freqDays ?? 14);
   const { name: fairy } = useFairy();
@@ -43,7 +45,7 @@ export default function GroupPage() {
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
     >
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: Math.max(insets.top, 12) + 8 }]}>
         <View style={styles.titleRow}>
           <BackButton />
           <Text style={styles.h1} numberOfLines={1}>{group.name}</Text>
@@ -134,7 +136,7 @@ export default function GroupPage() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   content: { paddingBottom: 16 },
-  header: { paddingHorizontal: 20, paddingTop: 8, paddingBottom: 18, gap: 12 },
+  header: { paddingHorizontal: 20, paddingBottom: 18, gap: 12 },
   titleRow: { flexDirection: "row", alignItems: "center", gap: 10 },
   h1: {
     flex: 1,

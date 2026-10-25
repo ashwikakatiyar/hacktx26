@@ -1,5 +1,6 @@
 import { VILLAGE, cottageState, type CottageState } from "@/lib/config";
 import { plural } from "@/lib/dates";
+import type { ImageSourcePropType } from "react-native";
 
 // What the village endpoint will return per friend. Note there is deliberately no attendee list:
 // the cottage detail only ever shows outings you and this friend did together.
@@ -7,6 +8,7 @@ export type VillageFriend = {
   id: number;
   name: string;
   avatarUrl: string | null;
+  avatarSource?: ImageSourcePropType | null;
   tint: string;
   daysSince: number | null; // days since you last hung out (happened events only)
   hangoutCount: number;

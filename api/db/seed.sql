@@ -4,6 +4,7 @@
 --   weathered: Kai 28, Priya 35, Mei 49
 --   run-down : Dani 90, Theo 140
 -- 9 friends fill 9 of 12 plots, so row 3 has open plots.
+-- The four bundled profile photos are stored at /avatars/{alex,sam,priya,jordan}.jpg.
 INSERT INTO
   users (
     id,
@@ -19,7 +20,7 @@ VALUES
     'Alex',
     '18-24',
     'woman',
-    'https://i.pravatar.cc/150?img=47',
+    '/avatars/alex.jpg',
     TRUE
   ),
   (
@@ -27,7 +28,7 @@ VALUES
     'Sam',
     '18-24',
     'man',
-    'https://i.pravatar.cc/150?img=12',
+    '/avatars/sam.jpg',
     TRUE
   ),
   (
@@ -35,7 +36,7 @@ VALUES
     'Priya',
     '18-24',
     'woman',
-    'https://i.pravatar.cc/150?img=32',
+    '/avatars/priya.jpg',
     TRUE
   ),
   (
@@ -43,7 +44,7 @@ VALUES
     'Jordan',
     '18-24',
     'non-binary',
-    'https://i.pravatar.cc/150?img=15',
+    '/avatars/jordan.jpg',
     TRUE
   ),
   (
@@ -51,7 +52,7 @@ VALUES
     'Marcus',
     '25-34',
     'man',
-    'https://i.pravatar.cc/150?img=53',
+    NULL,
     TRUE
   ),
   (
@@ -59,7 +60,7 @@ VALUES
     'Dani',
     '18-24',
     'woman',
-    'https://i.pravatar.cc/150?img=5',
+    NULL,
     TRUE
   ),
   (
@@ -67,7 +68,7 @@ VALUES
     'Riley',
     '18-24',
     'non-binary',
-    'https://i.pravatar.cc/150?img=33',
+    NULL,
     TRUE
   ),
   (
@@ -75,7 +76,7 @@ VALUES
     'Kai',
     '18-24',
     'man',
-    'https://i.pravatar.cc/150?img=59',
+    NULL,
     TRUE
   ),
   (
@@ -83,7 +84,7 @@ VALUES
     'Mei',
     '25-34',
     'woman',
-    'https://i.pravatar.cc/150?img=44',
+    NULL,
     TRUE
   ),
   (
@@ -91,7 +92,7 @@ VALUES
     'Theo',
     '25-34',
     'man',
-    'https://i.pravatar.cc/150?img=68',
+    NULL,
     TRUE
   );
 

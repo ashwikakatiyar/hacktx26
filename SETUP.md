@@ -9,6 +9,7 @@ Demo path: paste screenshot or text -> card -> share to group -> AI proposes din
 - [ ] [D] `npm install && npm run smoke`. All four must say OK before hour 2 ends.
 - [ ] [A] Create Postgres on Tiger Data, copy connection string to `DATABASE_URL`.
 - [ ] [A] `npm run db:init` (applies `db/schema.sql` + `db/seed.sql`).
+- [ ] [A] Existing demo DB: run `psql "$DATABASE_URL" -f db/migrations/007_profile_photos.sql` from `api/` to replace stock avatars.
 - [ ] [A] Vultr: Ubuntu 24.04 cloud compute instance (2 GB is enough). Point your .tech domain's A record at its IP.
 - [ ] [A] Deploy "hello world" (steps below) and confirm the .tech URL loads.
 - [ ] [C] UI shell in `app/` (Expo): tabs for Home, Groups, Profile, with placeholder cards.

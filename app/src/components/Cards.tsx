@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { Avatar, AvatarStack } from "@/components/Avatar";
 import { Icon } from "@/components/Icon";
 import { PriceTag } from "@/components/CardView";
-import { ActivityArt } from "@/components/PlaceArt";
+import { PlaceArt } from "@/components/PlaceArt";
 import { Text } from "@/components/Text";
 import { whenLabel, plural } from "@/lib/dates";
 import { useFairy } from "@/lib/fairy";
@@ -30,7 +30,7 @@ export function EventCard({
       accessibilityRole={onPress ? "button" : undefined}
       style={(s) => [styles.row, pressed(s)]}
     >
-      <ActivityArt type={event.activityType} size={size} height={compact ? 64 : 72} />
+      <PlaceArt type={event.activityType} size={size} height={compact ? 64 : 72} radius={8} seed={event.title} />
       <View style={[styles.rowBody, compact && styles.compactBody]}>
         <View style={styles.inline}>
           <Text style={styles.status}>Confirmed</Text>
@@ -119,7 +119,7 @@ export function IdeaCard({ idea, onPress }: { idea: Idea; onPress?: () => void }
       accessibilityRole={onPress ? "button" : undefined}
       style={(s) => [styles.row, pressed(s)]}
     >
-      <ActivityArt type={idea.activityType} size={52} height={64} />
+      <PlaceArt type={idea.activityType} size={52} height={64} radius={8} seed={idea.name} />
       <View style={styles.rowBody}>
         <View style={[styles.tag, { backgroundColor: tag.bg }]}>
           {by && <Avatar person={by} size={16} />}

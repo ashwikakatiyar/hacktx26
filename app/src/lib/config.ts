@@ -25,8 +25,8 @@ export const COTTAGE_LABEL: Record<CottageState, string> = {
 
 // Feature flags for the mock-data phase.
 export const FLAGS = {
-  // true = a fresh launch starts in onboarding. Profile > settings can always replay it.
-  showOnboardingOnLaunch: false,
+  // true = a fresh launch starts in onboarding. Profile > Preview onboarding can replay it.
+  showOnboardingOnLaunch: true,
 };
 
 export const INVITE_LINK = "https://thevillagetable.tech/join/alex"; // placeholder until the real domain is wired in

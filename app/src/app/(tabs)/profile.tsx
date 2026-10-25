@@ -1,5 +1,6 @@
 import { router } from "expo-router";
 import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "@/components/Text";
 import { Avatar } from "@/components/Avatar";
@@ -23,6 +24,7 @@ const money = (n: number) => `$${n.toFixed(2)}`;
 // Profile: your photo, confirmed plans, spending, and what you owe. Mock data for now; spending and
 // owed amounts come from Nessie in Phase 4.
 export default function Profile() {
+  const insets = useSafeAreaInsets();
   const [paid, setPaid] = useState<Set<number>>(new Set());
   const thisMonth = SPENDING.months[SPENDING.months.length - 1];
   const owes = OWES.filter((o) => !paid.has(o.id));
@@ -30,7 +32,7 @@ export default function Profile() {
   return (
     <ScrollView
       style={styles.screen}
-      contentContainerStyle={styles.content}
+      contentContainerStyle={[styles.content, { paddingTop: Math.max(insets.top, 12) + 8 }]}
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.profileHead}>
@@ -53,6 +55,13 @@ export default function Profile() {
               style={styles.visit}
             >
               <Text style={styles.visitText}>Visit your village</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => router.push("/onboarding")}
+              accessibilityRole="button"
+              style={styles.preview}
+            >
+              <Text style={styles.previewText}>Preview onboarding</Text>
             </Pressable>
           </View>
           <Sprig size={30} />
@@ -131,7 +140,7 @@ export default function Profile() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.bg },
   content: { paddingBottom: 28 },
-  profileHead: { paddingHorizontal: 20, paddingTop: 16, paddingBottom: 16 },
+  profileHead: { paddingHorizontal: 20, paddingBottom: 16 },
   headRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -158,6 +167,17 @@ const styles = StyleSheet.create({
     color: colors.ink,
     textDecorationLine: "none",
   },
+  preview: {
+    alignSelf: "flex-start",
+    minHeight: 36,
+    justifyContent: "center",
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: colors.lineStrong,
+    borderRadius: 9,
+    backgroundColor: colors.card,
+  },
+  previewText: { fontSize: 12, fontWeight: "700", color: colors.ink },
   main: { paddingHorizontal: 20, paddingTop: 4, gap: 14 },
   h2: {
     fontFamily: fonts.display,

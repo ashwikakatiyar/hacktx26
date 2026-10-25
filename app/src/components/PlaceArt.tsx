@@ -149,17 +149,45 @@ export function PlaceArt({
   width?: number | `${number}%`;
   height?: number;
 }) {
-  void seed;
+  const uid = useId().replace(/[^a-zA-Z0-9]/g, "");
+  const t = type ?? "other";
+  const scene = SCENES[hash(seed ?? t) % SCENES.length];
   const w = width ?? size;
   const h = height ?? size;
-  if (imageUrl) {
-    return (
-      <View style={[styles.box, { width: w, height: h, borderRadius: radius }]}>
-        <Image source={{ uri: imageUrl }} style={StyleSheet.absoluteFill} contentFit="cover" transition={150} />
-      </View>
-    );
-  }
-  return <ActivityArt type={type} width={w} height={h} />;
+  return (
+    <View style={[styles.box, { width: w, height: h, borderRadius: radius }]}>
+      {imageUrl ? (
+        <Image
+          source={{ uri: imageUrl }}
+          style={StyleSheet.absoluteFill}
+          contentFit="cover"
+          transition={150}
+        />
+      ) : (
+        <Svg width="100%" height="100%" viewBox="0 0 96 96" preserveAspectRatio="xMidYMid slice" {...decorative}>
+          <Defs>
+            <LinearGradient id={`g${uid}`} x1="0" y1="0" x2="0" y2="1">
+              <Stop offset="0" stopColor={scene.top} />
+              <Stop offset="1" stopColor={scene.bottom} />
+            </LinearGradient>
+          </Defs>
+          <Rect width={96} height={96} fill={`url(#g${uid})`} />
+          {scene.stars && (
+            <G fill="#fff" opacity={0.85}>
+              <Circle cx={14} cy={14} r={1.1} />
+              <Circle cx={80} cy={12} r={1.3} />
+              <Circle cx={30} cy={26} r={0.9} />
+              <Circle cx={88} cy={34} r={0.9} />
+            </G>
+          )}
+          <Circle cx={76} cy={20} r={9} fill={scene.orb} opacity={0.95} />
+          <Path d="M0 74 Q26 56 54 70 T96 66 V96 H0Z" fill={scene.hill1} />
+          <Path d="M0 86 Q40 72 96 84 V96 H0Z" fill={scene.hill2} />
+          <Motif type={t} />
+        </Svg>
+      )}
+    </View>
+  );
 }
 
 // Compact, flat illustration used by the handoff screens.

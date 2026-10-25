@@ -3,39 +3,55 @@
 // real API calls later is a data-source change, not a UI change.
 import { inDays } from "@/lib/dates";
 import type { VillageFriend } from "@/lib/village";
+import type { ImageSourcePropType } from "react-native";
 
 export type Person = {
   id: number;
   name: string;
   avatarUrl: string | null;
+  avatarSource?: ImageSourcePropType | null;
   tint: string;
+};
+
+// These local assets are the four uploaded profile photos, in upload order.
+const PROFILE_PHOTOS: Record<number, ImageSourcePropType> = {
+  1: require("../../assets/avatars/alex.jpg"),
+  2: require("../../assets/avatars/sam.jpg"),
+  3: require("../../assets/avatars/priya.jpg"),
+  4: require("../../assets/avatars/jordan.jpg"),
+};
+const PROFILE_PHOTO_URLS: Record<number, string> = {
+  1: "/avatars/alex.jpg",
+  2: "/avatars/sam.jpg",
+  3: "/avatars/priya.jpg",
+  4: "/avatars/jordan.jpg",
 };
 
 const p = (
   id: number,
   name: string,
   tint: string,
-  img: number | null,
 ): Person => ({
   id,
   name,
   tint,
-  avatarUrl: img === null ? null : `https://i.pravatar.cc/150?img=${img}`,
+  avatarUrl: PROFILE_PHOTO_URLS[id] ?? null,
+  avatarSource: PROFILE_PHOTOS[id] ?? null,
 });
 
-export const ME: Person = p(1, "Alex", "#E3B04B", 47);
+export const ME: Person = p(1, "Alex", "#E3B04B");
 
 export const PEOPLE: Record<number, Person> = {
   1: ME,
-  2: p(2, "Sam", "#F6DE9A", 12),
-  3: p(3, "Priya", "#F4C6D6", 32),
-  4: p(4, "Jordan", "#B9E0C9", 15),
-  5: p(5, "Marcus", "#CBB8F5", 53),
-  6: p(6, "Dani", "#F4C6D6", 5),
-  7: p(7, "Riley", "#B9E0C9", 33),
-  8: p(8, "Kai", "#B9E0C9", 59),
-  9: p(9, "Mei", "#CBB8F5", 44),
-  10: p(10, "Theo", "#F6DE9A", 68),
+  2: p(2, "Sam", "#F6DE9A"),
+  3: p(3, "Priya", "#F4C6D6"),
+  4: p(4, "Jordan", "#B9E0C9"),
+  5: p(5, "Marcus", "#CBB8F5"),
+  6: p(6, "Dani", "#F4C6D6"),
+  7: p(7, "Riley", "#B9E0C9"),
+  8: p(8, "Kai", "#B9E0C9"),
+  9: p(9, "Mei", "#CBB8F5"),
+  10: p(10, "Theo", "#F6DE9A"),
 };
 
 export const PIXIE_NEW_IDEAS = 3;
@@ -232,6 +248,7 @@ const friend = (
     id,
     name: person.name,
     avatarUrl: person.avatarUrl,
+    avatarSource: person.avatarSource,
     tint: person.tint,
     daysSince,
     hangoutCount: outings.length,

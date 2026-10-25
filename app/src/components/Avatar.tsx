@@ -1,12 +1,14 @@
 import { Image } from "expo-image";
 import { useState } from "react";
-import { StyleSheet, View, type StyleProp, type ViewStyle } from "react-native";
+import { StyleSheet, View, type ImageSourcePropType, type StyleProp, type ViewStyle } from "react-native";
 import { Text } from "@/components/Text";
+import { API_URL } from "@/lib/api";
 import { colors } from "@/lib/theme";
 
 export type AvatarPerson = {
   name: string;
   avatarUrl: string | null;
+  avatarSource?: ImageSourcePropType | null;
   tint: string;
 };
 
@@ -25,7 +27,12 @@ export function Avatar({
   style?: StyleProp<ViewStyle>;
 }) {
   const [failed, setFailed] = useState(false);
-  const showPhoto = !!person.avatarUrl && !failed;
+  const photoSource = person.avatarSource ?? (
+    person.avatarUrl
+      ? { uri: person.avatarUrl.startsWith("/") ? `${API_URL}${person.avatarUrl}` : person.avatarUrl }
+      : null
+  );
+  const showPhoto = !!photoSource && !failed;
   return (
     <View
       accessibilityLabel={person.name}
@@ -44,7 +51,7 @@ export function Avatar({
     >
       {showPhoto ? (
         <Image
-          source={{ uri: person.avatarUrl! }}
+          source={photoSource!}
           style={styles.fill}
           contentFit="cover"
           onError={() => setFailed(true)}

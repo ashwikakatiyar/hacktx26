@@ -64,11 +64,7 @@ async function offerCard(to: string, userId: number, cardId: number, notes: stri
   );
   const lines = [
     card.needs_review
-      ? `I added "${card.name}"${card.address ? ` (${card.address})` : ""} but couldn't find ${
-          [card.price_level == null && "the price", !card.image_url && "a photo"]
-            .filter(Boolean)
-            .join(" or ") || "some details"
-        }. You can fix it in the app.`
+      ? `I added "${card.name}" but couldn't find the price or photo. You can fix it in the app.`
       : `🧚 Added to your list:\n*${card.name}* · ${price(card.price_level)} · ${card.activity_type ?? "idea"}${card.address ? `\n${card.address}` : ""}`,
     ...notes,
   ];
@@ -84,8 +80,7 @@ async function offerCard(to: string, userId: number, cardId: number, notes: stri
 async function handleIdea(to: string, user: { id: number }, input: { text?: string; imageBase64?: string }) {
   const { draft, meta } = await buildCard(input);
   const id = await insertCard(draft, user.id);
-  if (meta.fallbacks.length || meta.errors.length)
-    console.log("[whatsapp] card", id, "fallbacks:", meta.fallbacks, "errors:", meta.errors);
+  if (meta.fallbacks.length) console.log("[whatsapp] card", id, "fallbacks:", meta.fallbacks);
   await offerCard(to, user.id, id);
 }
 
@@ -116,12 +111,9 @@ async function handleChoice(to: string, user: { id: number }, choice: string) {
     const { status, body } = await callRoute(planRoute as any, x, user.id);
     if (status === 403) return sendText(to, "You're not in that group.");
     if (status === 422)
-      // The route returns a proposal object only when the blocker is availability.
       return sendText(
         to,
-        body.proposal
-          ? "I found a good idea, but I can't find a time when everyone is free. 🧚 Open Round Table and add your free times, then tap Plan it again."
-          : "This group needs at least one shared idea before I can plan. Send me a place first! 🧚",
+        body.message ?? "I need at least one shared idea and some overlapping free time to plan that.",
       );
     if (!body.event_id) return sendText(to, "Something went wrong planning that. Try again in the app.");
     const p = body.proposal;

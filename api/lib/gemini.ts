@@ -48,49 +48,23 @@ export async function extractFromInput(input: {
     });
   }
 
-  // Google returns 503/429 when a model is busy. Retry once, then try the fallback models
-  // listed in GEMINI_FALLBACK_MODELS (comma separated), so a traffic spike can't kill the demo.
-  const models = [
-    model,
-    ...(process.env.GEMINI_FALLBACK_MODELS ?? "")
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean),
-  ];
-  const body = JSON.stringify({
-    contents: [{ parts }],
-    generationConfig: { responseMimeType: "application/json", temperature: 0 },
-  });
-  let r: Response | null = null;
-  let lastError = "";
-  outer: for (const m of models) {
-    for (let attempt = 0; attempt < 2; attempt++) {
-      try {
-        const res = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${key}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body,
-            signal: AbortSignal.timeout(8_000),
-          },
-        );
-        if (res.ok) {
-          r = res;
-          break outer;
-        }
-        lastError = `${m}: ${res.status} ${(await res.text()).slice(0, 200)}`;
-        // Only busy/overloaded errors are worth retrying; a bad key or model name will not fix itself.
-        if (![429, 500, 502, 503, 504].includes(res.status)) break;
-      } catch (e: any) {
-        // Timeout or network error: don't wait on this model again, move to the next one.
-        lastError = `${m}: ${e?.message ?? e}`;
-        break;
-      }
-      await new Promise((ok) => setTimeout(ok, 700));
-    }
-  }
-  if (!r) throw new Error(`gemini ${lastError}`);
+  const r = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts }],
+        generationConfig: {
+          responseMimeType: "application/json",
+          temperature: 0,
+        },
+      }),
+      signal: AbortSignal.timeout(25_000),
+    },
+  );
+  if (!r.ok)
+    throw new Error(`gemini ${r.status}: ${(await r.text()).slice(0, 200)}`);
   const j = await r.json();
   const raw: string =
     j.candidates?.[0]?.content?.parts?.map((p: any) => p.text ?? "").join("") ??
