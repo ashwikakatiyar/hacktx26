@@ -1,4 +1,4 @@
--- The Round Table: schema (Phase 0)
+-- Kindred: schema (Phase 0)
 -- Run with: npm run db:init
 DROP TABLE IF EXISTS expenses,
 availability,

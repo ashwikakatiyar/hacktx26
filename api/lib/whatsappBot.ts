@@ -111,9 +111,12 @@ async function handleChoice(to: string, user: { id: number }, choice: string) {
     const { status, body } = await callRoute(planRoute as any, x, user.id);
     if (status === 403) return sendText(to, "You're not in that group.");
     if (status === 422)
+      // The route returns a proposal object only when the blocker is availability.
       return sendText(
         to,
-        body.message ?? "I need at least one shared idea and some overlapping free time to plan that.",
+        body.proposal
+          ? "I found a good idea, but I can't find a time when everyone is free. 🧚 Open Kindred and add your free times, then tap Plan it again."
+          : "This group needs at least one shared idea before I can plan. Send me a place first! 🧚",
       );
     if (!body.event_id) return sendText(to, "Something went wrong planning that. Try again in the app.");
     const p = body.proposal;
@@ -150,7 +153,7 @@ export async function handleMessage(msg: WaMessage) {
   if (!user)
     return sendText(
       to,
-      "Hi! I don't know this number yet. Join Round Table in the app and link your WhatsApp number there.",
+      "Hi! I don't know this number yet. Join Kindred in the app and link your WhatsApp number there.",
     );
 
   if (msg.type === "interactive") {

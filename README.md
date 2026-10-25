@@ -1,4 +1,4 @@
-# The Round Table
+# Kindred
 
 - `app/`  Expo (React Native) frontend. This is what you demo on a phone.
 - `api/`  Backend (Next.js API routes), Postgres schema + seed, API smoke tests. Holds all API keys.

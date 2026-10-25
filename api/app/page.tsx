@@ -1,3 +1,3 @@
 export default function Page() {
-  return <p>The Round Table API is running.</p>;
+  return <p>Kindred API is running.</p>;
 }

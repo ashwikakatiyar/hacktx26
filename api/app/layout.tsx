@@ -1,4 +1,4 @@
-export const metadata = { title: "The Round Table API" };
+export const metadata = { title: "Kindred API" };
 
 export default function RootLayout({
   children,
